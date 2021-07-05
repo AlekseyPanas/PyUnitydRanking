@@ -1,11 +1,11 @@
 @font-face {
 	font-family: "Gothic";
-	src: url(gothic.ttf);
+	src: url(../fonts/gothic.ttf);
 }
 
 @font-face {
 	font-family: "Gill";
-	src: url(gill.ttf);
+	src: url(../fonts/gill.ttf);
 }
 
 html {
