@@ -1,0 +1,92 @@
+@font-face {
+	font-family: "Gothic";
+	src: url(gothic.ttf);
+}
+
+@font-face {
+	font-family: "Gill";
+	src: url(gill.ttf);
+}
+
+html {
+    height: 100%;
+}
+body {
+    background-image: linear-gradient(#00faa7, #049aff);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    width: 100%;
+    margin: 0px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#main-container {
+    position: relative;
+    margin-top: 50px;
+    margin-bottom: auto;
+    text-align: center;
+}
+
+#title {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-left: 0px;
+    margin-bottom: -22px;
+    font-family: 'Gill';
+    font-size: 60pt;
+}
+
+.grad {
+    background-image: linear-gradient(rgb(117, 255, 104), rgb(186, 255, 121), rgb(232, 255, 131), rgb(255, 152, 152));
+    /*background-size: 100% 100vh;*/
+    
+    background-repeat: no-repeat;
+    background-position: top;
+    background-attachment: fixed;  /* <- here it is */
+}
+
+.group-container {
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 25px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, .6);
+    border: solid 1px #000000;
+}
+
+.group-name {
+    font-family: Gothic;
+    font-size: 30pt;
+    color: rgb(138, 0, 156);
+    text-shadow: 2px 2px 3px #000000;
+    margin: 0px;
+}
+
+.names-list {
+    margin: 0px;
+}
+
+.points-container {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serifs;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.points-value {
+    color: green;
+}
+
+#list-container {
+    padding: 20px;
+    border-radius: 25px;
+    background-color: rgba(164, 201, 255, .8);
+    width: 600px;
+    margin: auto;
+    border: solid 1px #000000;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, .6);
+}
