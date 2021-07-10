@@ -1,0 +1,84 @@
+HTML, CSS, Jquery/JS(edited)
+Node, Express, ejs template engine, SQLite(edited)
+
+Database:
+Users Table:
+    User ID (primary key)
+    User Name (Full string name)
+    User profile (Path to profile image, can be null)
+
+Year Table:
+    Year ID (primary key)
+    Year name (string of the year of the club)
+
+Year Member Table (Links Users to a specific year, as well as their position):
+    User ID (ID of user from user table)
+    Year ID (ID of year from year table)
+    Position (String of title "President", "Member", "Treasurer")
+    Team ID (ID of team they were part of) 
+
+Teams Table (Table of group teams in the club)
+    Team ID (primary Key)
+    Year ID (Year this team corresponds to)
+    Team Name (String name)
+    Team Letter (String letter)
+
+Award Table:
+    Award ID (primary key)
+    Award name (string name)
+    Award Image (badge to be displayed on the website)
+
+Award Winner Table:
+    User ID (User who got this award)
+    Award ID (ID of award that was won)
+    Year ID (ID of year from year table)
+
+
+
+
+Members page -> 
+-------------------------
+Separated by year in tabs, 
+sectioned off by team, 
+Optional labels(edited)
+
+
+
+
+
+Games -> 
+-------------------------
+Separated by year in tabs, 
+Each game has title, 
+cover image, 
+author (hyperlink to members page where that team is), 
+icons (python/unity/roblox), 
+download page/link (download mac, download windows, link to roblox)
+
+
+
+
+
+Ranking Page -> 
+-------------------------
+Same thing as current website. Point tracker, separated by years
+
+
+Home/News Page ->
+-------------------------
+Shows recent news posts regarding the organization
+
+
+Home page -> 
+-------------------------
+About the club
+
+
+
+
+Admin dash ->
+-------------------------
+Add year tabs, 
+Add members (Upload portrait, name, team category, optional title tag, Class (junior, senior, freshie, soph)), 
+Upload game (Upload mac files/windows files/ game link, Name, Year, Team, Cover Image Upload), 
+Update point ranks

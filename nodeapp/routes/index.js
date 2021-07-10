@@ -3,8 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.redirect('ranking');
-  //res.render('index', { title: 'Express' });
+  res.render('index', { page: "Home" });
 });
 
 /* GET rankings page. */
