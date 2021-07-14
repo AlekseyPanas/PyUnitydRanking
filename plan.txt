@@ -5,7 +5,6 @@ Database:
 Users Table:
     User ID (primary key)
     User Name (Full string name)
-    User profile (Path to profile image, can be null)
 
 Year Table:
     Year ID (primary key)
@@ -15,7 +14,8 @@ Year Member Table (Links Users to a specific year, as well as their position):
     User ID (ID of user from user table)
     Year ID (ID of year from year table)
     Position (String of title "President", "Member", "Treasurer")
-    Team ID (ID of team they were part of) 
+    Team ID (ID of team they were part of)
+    User profile (Path to profile image for that year, can be null) 
 
 Teams Table (Table of group teams in the club)
     Team ID (primary Key)
@@ -33,7 +33,14 @@ Award Winner Table:
     Award ID (ID of award that was won)
     Year ID (ID of year from year table)
 
-
+Article Table:
+    Article ID
+    Article date  
+    Article title (ie Example Title)
+    Article url title (ie example-title)
+    Article Content HTML
+    Article Summary (Description for front page)
+    Article Cover Image (Image for front page, can be null)
 
 
 Members page -> 

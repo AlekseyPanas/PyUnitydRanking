@@ -1,11 +1,12 @@
+/* Build Tables 
+   ============ */
 CREATE TABLE "users" (
-	"user_id" INTEGER PRIMARY KEY,
-    "user_name" TEXT,
-    "user_profile_path" TEXT
+	"user_id" INTEGER PRIMARY KEY ASC,
+    "user_name" TEXT
 );
 
 CREATE TABLE "years" (
-	"year_id" INTEGER PRIMARY KEY,
+	"year_id" INTEGER PRIMARY KEY ASC,
     "year_name" TEXT
 );
 
@@ -13,7 +14,8 @@ CREATE TABLE "year_member_links" (
 	"user_id" INTEGER,
     "year_id" INTEGER,
     "team_id" INTEGER,
-    "position" TEXT
+    "position" TEXT,
+    "user_profile_path" TEXT
 );
 
 CREATE TABLE "award_winners" (
@@ -23,15 +25,73 @@ CREATE TABLE "award_winners" (
 );
 
 CREATE TABLE "teams" (
-    "team_id" INTEGER PRIMARY KEY,
+    "team_id" INTEGER PRIMARY KEY ASC,
     "year_id" INTEGER,
     "team_name" TEXT,
     "team_letter" TEXT
 );
 
 CREATE TABLE "awards" (
-    "award_id" INTEGER PRIMARY KEY,
+    "award_id" INTEGER PRIMARY KEY ASC,
     "award_name" TEXT,
     "award_image_path" TEXT
 );
 
+CREATE TABLE "articles" (
+    "article_id" INTEGER PRIMARY KEY ASC,
+    "publish_date_string" TEXT,
+    "article_title" TEXT,
+    "article_url_title" TEXT,
+    "content_html" TEXT,
+    "summary" TEXT,
+    "cover_image_path" TEXT
+);
+
+/* Website Utility Queries 
+   ======================= */
+
+/* Select latest articles */
+SELECT article_id,
+publish_date_string, 
+article_title, 
+article_url_title, 
+content_html, 
+summary, 
+cover_image_path FROM articles ORDER BY article_id DESC LIMIT ?;
+
+/* Select articles within range */
+SELECT article_id, 
+publish_date_string, 
+article_title, 
+article_url_title, 
+content_html, 
+summary, 
+cover_image_path FROM articles WHERE article_id < ? ORDER BY article_id DESC LIMIT ?;
+
+/* Select article by url */
+SELECT article_id, 
+publish_date_string, 
+article_title, 
+article_url_title, 
+content_html, 
+summary, 
+cover_image_path FROM articles WHERE article_url_title = ?;
+
+/* TESTING QUERIES
+   =============== */
+
+/* Create new article */
+INSERT INTO articles 
+(publish_date_string, 
+article_title, 
+article_url_title, 
+content_html, 
+summary, 
+cover_image_path) VALUES (
+'7-14-2021',
+'Test Article 2',
+'test-article-2',
+'<p> A test article </p>',
+'A test article',
+'https://techbeacon.scdn7.secure.raxcdn.com/sites/default/files/styles/article_hero_image/public/field/image/testing-trends-world-quality-report.jpg?itok=vUyONZsj'
+)

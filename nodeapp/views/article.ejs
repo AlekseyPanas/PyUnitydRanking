@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <% include partials/head %>
+    <% include partials/scripts %>
+    <% include partials/bootstrap %>
+
+    <body>
+        <% include partials/nav %>
+
+        <div id="main-container">
+            <div id="article-container">
+                <h1 id="article-title"> <%= article.article_title %> </h1>
+                <p id="article-date"> <%= article.publish_date_string %> </p>
+                <%- article.content_html %>
+
+            </div>
+        </div>
+
+        <% include partials/footer %>
+    </body>
+
+</html>
