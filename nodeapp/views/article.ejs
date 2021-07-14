@@ -9,9 +9,15 @@
 
         <div id="main-container">
             <div id="article-container">
-                <h1 id="article-title"> <%= article.article_title %> </h1>
-                <p id="article-date"> <%= article.publish_date_string %> </p>
-                <%- article.content_html %>
+                <div id="article-inner-container">
+                    <h6 id="article-date"> Published on <%= article.publish_date_string %> </h6>
+                    <hr></hr>
+                    <h1 id="article-title"> <%= article.article_title %> </h1>
+                    
+                    <div id="article-content-container">
+                        <%- article.content_html %>
+                    </div>
+                </div>
 
             </div>
         </div>
