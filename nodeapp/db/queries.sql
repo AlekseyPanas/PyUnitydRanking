@@ -28,7 +28,8 @@ CREATE TABLE "teams" (
     "team_id" INTEGER PRIMARY KEY ASC,
     "year_id" INTEGER,
     "team_name" TEXT,
-    "team_letter" TEXT
+    "team_letter" TEXT,
+    "hackathon_points"	INTEGER
 );
 
 CREATE TABLE "awards" (
@@ -47,35 +48,6 @@ CREATE TABLE "articles" (
     "cover_image_path" TEXT
 );
 
-/* Website Utility Queries 
-   ======================= */
-
-/* Select latest articles */
-SELECT article_id,
-publish_date_string, 
-article_title, 
-article_url_title, 
-content_html, 
-summary, 
-cover_image_path FROM articles ORDER BY article_id DESC LIMIT ?;
-
-/* Select articles within range */
-SELECT article_id, 
-publish_date_string, 
-article_title, 
-article_url_title, 
-content_html, 
-summary, 
-cover_image_path FROM articles WHERE article_id < ? ORDER BY article_id DESC LIMIT ?;
-
-/* Select article by url */
-SELECT article_id, 
-publish_date_string, 
-article_title, 
-article_url_title, 
-content_html, 
-summary, 
-cover_image_path FROM articles WHERE article_url_title = ?;
 
 /* TESTING QUERIES
    =============== */

@@ -2,12 +2,22 @@
 <html lang="en"> 
     <% include partials/head %>
     <% include partials/scripts %>
-    <script src="javascripts/ranking_script.js"></script>
+    <script>
+        let selected_year = <%- JSON.stringify(selected_year) %>;
+    </script>
+    <script src="/javascripts/ranking_script.js"></script>
 
     <body>
         <% include partials/nav %>
 
         <div id="main-container">
+
+            <div id="year-tab-container"> 
+                <% years.forEach((year) => { %>
+                    <button id="<%= year.year_id %>" class="year-tab-button <% if (year.year_id == selected_year.year_id) { %> selected-tab <% } %>"> <%= year.year_name %> </button>
+                <% }); %>
+            </div>
+
             <div id="main-container-rankings">
                 <h1 id="title"> Ranking </h1>
 

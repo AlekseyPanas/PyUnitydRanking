@@ -79,9 +79,8 @@ const get_article_by_url = async (url) => {
     cover_image_path FROM articles WHERE article_url_title = ?;`, [url]);
 
     // Closes connection
-    db.close()
+    db.close();
 
-    console.log("here")
     // Return found article (or null)
     return !!art ? {
         article_id: art.article_id,
@@ -94,8 +93,46 @@ const get_article_by_url = async (url) => {
     }: null;
 }
 
+// Get all years
+const get_years = async () => {
+    // Opens connection
+    let db = await sqlite3.open('./db/db.db');
+
+    // Gets all years as json
+    let years = (await db.all("SELECT year_id, year_name FROM years;")).map((i) => {return {
+        year_id: i.year_id,
+        year_name: i.year_name
+    }});
+
+    // Closes connection
+    db.close();
+
+    return years
+}
+
+// Returns all teams in a given year
+const get_teams_in_year = async (year_id) => {
+    // Opens connection
+    let db = await sqlite3.open('./db/db.db');
+
+    // Gets all years as json
+    let teams = (await db.all("SELECT team_id, team_name, team_letter, hackathon_points FROM teams WHERE year_id = ?;", [year_id])).map((i) => {return {
+        team_id: i.team_id,
+        team_name: i.team_name,
+        team_letter: i.team_letter,
+        hackathon_points: i.hackathon_points
+    }});
+
+    // Closes connection
+    db.close();
+
+    return teams
+}
+
 module.exports = {
     get_latest_articles: (how_many) => get_latest_articles(how_many),
     get_article_range: (below_ID_exclusive, how_many) => get_article_range(below_ID_exclusive, how_many),
-    get_article_by_url: (url) => get_article_by_url(url)
+    get_article_by_url: (url) => get_article_by_url(url),
+    get_years: () => get_years(),
+    get_teams_in_year: (year_id) => get_teams_in_year(year_id)
 };

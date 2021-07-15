@@ -12,8 +12,32 @@ router.get('/', async (req, res, next) => {
 
 /* GET rankings page. */
 router.get('/ranking', async (req, res, next) => {
-  res.render('ranking', {page: "Rankings"});
+  // Finds latest year
+  let years = await db.get_years();
+  let latest_year;
+  for (i = 0; i < years.length; i++) {
+    if (!(!!latest_year) || years[i].year_id > latest_year.year_id) {
+      latest_year = years[i];
+    }
+  }
+
+  // Redirects to latest year page
+  res.redirect("/ranking/" + latest_year.year_id);
 });
+
+/* GET individual rankings pages */
+router.get('/ranking/:year_id', async (req, res, next) => {
+  let years = await db.get_years();
+  let selected_year = years.filter((yr) => {return yr.year_id == req.params.year_id})[0];
+
+  res.render('ranking', {
+    page: "Rankings",
+    years: years,
+    selected_year: selected_year,
+    // 
+    teams: [{}]
+  });
+})
 
 /* GET about page. */
 router.get('/about', async (req, res, next) => {

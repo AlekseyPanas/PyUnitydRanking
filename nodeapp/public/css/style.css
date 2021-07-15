@@ -428,6 +428,35 @@ ______            _    _
                                |___/     
 */
 
+#year-tab-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 60), rgba(0, 0, 0, 0));
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.year-tab-button {
+  background-color: black;
+  color: #7de7a1;
+  border-color: #7de7a1;
+  border-radius: 5px 5px 0 0;
+  border-width: 2px 1px 0px 1px;
+  border-style: solid;
+  text-align: center;
+  text-decoration: none;
+  padding: 10px 3px;
+  margin: 0 5px;
+}
+
+.selected-tab {
+  color: black;
+  background-color: #7de7a1;
+  border-color: black;
+}
+
 #main-container-rankings {
     position: relative;
     margin-top: 50px;
