@@ -115,18 +115,26 @@ const get_teams_in_year = async (year_id) => {
     // Opens connection
     let db = await sqlite3.open('./db/db.db');
 
-    // Gets all years as json
-    let teams = (await db.all("SELECT team_id, team_name, team_letter, hackathon_points FROM teams WHERE year_id = ?;", [year_id])).map((i) => {return {
-        team_id: i.team_id,
-        team_name: i.team_name,
-        team_letter: i.team_letter,
-        hackathon_points: i.hackathon_points
-    }});
+    // Gets all teams of a specific year, as well as their members
+    let teams = (await (db.all("SELECT team_id, team_name, team_letter, hackathon_points FROM teams WHERE year_id = ?;", [year_id]))).map((i) => {
+        return {
+            team_id: i.team_id,
+            team_name: i.team_name,
+            team_letter: i.team_letter,
+            hackathon_points: i.hackathon_points
+        };
+    });
+    for (const team of teams) {
+        team.members = (await (db.all(`SELECT u.user_name FROM year_member_links l INNER JOIN users u ON u.user_id = l.user_id WHERE l.team_id = ? AND l.year_id = ?;`, [team.team_id, year_id]))).map((i) => i.user_name);
+        console.log(team.members);
+    }
+
+    console.log(teams);
 
     // Closes connection
     db.close();
 
-    return teams
+    return teams;
 }
 
 module.exports = {

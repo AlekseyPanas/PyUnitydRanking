@@ -2,6 +2,8 @@ var express = require('express');
 var db = require("../db/db");
 var router = express.Router();
 
+
+
 /* GET home page. */
 router.get('/', async (req, res, next) => {
   res.render('index', { 
@@ -9,6 +11,8 @@ router.get('/', async (req, res, next) => {
     articles: await db.get_latest_articles(process.env.ARTICLE_BATCH_SIZE)
   });
 });
+
+
 
 /* GET rankings page. */
 router.get('/ranking', async (req, res, next) => {
@@ -25,6 +29,8 @@ router.get('/ranking', async (req, res, next) => {
   res.redirect("/ranking/" + latest_year.year_id);
 });
 
+
+
 /* GET individual rankings pages */
 router.get('/ranking/:year_id', async (req, res, next) => {
   let years = await db.get_years();
@@ -34,8 +40,7 @@ router.get('/ranking/:year_id', async (req, res, next) => {
     page: "Rankings",
     years: years,
     selected_year: selected_year,
-    // 
-    teams: [{}]
+    teams: await (db.get_teams_in_year(selected_year.year_id))
   });
 })
 
