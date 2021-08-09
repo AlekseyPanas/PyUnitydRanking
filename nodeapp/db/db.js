@@ -129,8 +129,6 @@ const get_teams_in_year = async (year_id) => {
         console.log(team.members);
     }
 
-    console.log(teams);
-
     // Closes connection
     db.close();
 
