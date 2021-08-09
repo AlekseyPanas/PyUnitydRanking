@@ -7,7 +7,16 @@ function onResize () {
     let content_height = 0;
 
     // For each body child, adds the inner height (with padding) and the margins to the height count
-    $("body").children().map((i, itm) => {content_height += parseInt($(itm).css("margin-top")) + parseInt($(itm).css("margin-bottom")) + $(itm).innerHeight()});
+    $("body").children().map((i, itm) => {
+        element_height = parseInt($(itm).css("margin-top")) + parseInt($(itm).css("margin-bottom")) + $(itm).innerHeight();
+        
+        console.log(itm.className);
+        console.log(itm.id);
+        console.log(element_height);
+        
+        content_height += element_height;
+    });
+    console.log("-----------------------")
 
     // Calculates pixels from the bottom of the screen
     let pixels_till_bottom = $(window).height() - content_height;
@@ -18,13 +27,9 @@ function onResize () {
     }
 }
 
-$(document).ready(() => {
+$(window).on("load", () => {
     // Call the function again once the page has loaded (in case it wasnt done right)
     onResize();
     // Readjust on window resize
     $(window).on("resize", onResize);
-    // An extra precaution yknow?
-    setTimeout(onResize, 100);
 })
-// Call the function before page loads
-onResize();
