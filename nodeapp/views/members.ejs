@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"> 
+    <% include partials/head %>
+    <% include partials/scripts %>
+    <% include partials/bootstrap %>
+
+    <script> 
+        // Populates selected year
+        let selected_year = <%- JSON.stringify(selected_year) %>;
+
+        $(document).ready(() => {
+            // Selects tab when clicked
+            $(".year-tab-button").click((event) => {
+                if (!($(event.target).attr("id") === selected_year.year_id)) {
+                    location.href = "/members/" + $(event.target).attr("id");
+                }
+            })
+        });
+
+    </script>
+
+    <body>
+        <% include partials/nav %>
+
+        <div id="main-container">
+
+            <div id="year-tab-container"> 
+                <% years.forEach((year) => { %>
+                    <button id="<%= year.year_id %>" class="year-tab-button <% if (year.year_id == selected_year.year_id) { %> selected-tab <% } %>"> <%= year.year_name %> </button>
+                <% }); %>
+            </div>
+
+            <%teams.forEach((team) => {%>
+                <div class="members-team-outer-container">
+                    <h1 class="members-team-name"> <%= team.team_name %> </h1>
+                    <div class="members-team-container">
+                        <% team.members.forEach((member) => { %>
+                            <div class="member-container"> 
+                                <img class="members-profile-image" src=" <%= !!member.user_profile_path ? member.user_profile_path : '/images/profiles/blank_profile.png'  %>"></img>
+                                <p class="member-name"> <%= member.user_name %> </p>
+                                <p class="member-title" <% let t = member.position.toLowerCase(); if (t != "member") { %> style="font-weight: bold; <% if (t == "president") { %> color: rgba(180, 0, 0); <% } else if (t == "co-president") {;%> color: rgba(110, 0, 0); <%} else if (t=="treasurer") {%> color: rgba(90, 90, 0); <%} else {%> color: rgba(0, 0, 150); <%}};%> " > <%= member.position %> </p>
+                            </div>
+                        <%});%>
+                    </div>
+                </div>
+            <%});%>
+
+        </div>
+    </body>
+
+    <% include partials/footer %>
+
+</html>

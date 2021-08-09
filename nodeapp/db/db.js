@@ -125,8 +125,8 @@ const get_teams_in_year = async (year_id) => {
         };
     });
     for (const team of teams) {
-        team.members = (await (db.all(`SELECT u.user_name FROM year_member_links l INNER JOIN users u ON u.user_id = l.user_id WHERE l.team_id = ? AND l.year_id = ?;`, [team.team_id, year_id]))).map((i) => i.user_name);
-        console.log(team.members);
+        team.members = (await (db.all(`SELECT u.user_id, u.user_name, l.position, l.user_profile_path FROM year_member_links l INNER JOIN users u ON u.user_id = l.user_id WHERE l.team_id = ? AND l.year_id = ?;`, [team.team_id, year_id])));
+        //console.log(JSON.stringify(team.members));
     }
 
     // Closes connection

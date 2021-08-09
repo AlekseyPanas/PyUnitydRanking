@@ -539,3 +539,56 @@ ______            _    _
     font-size: 7vw;
   }
 }
+
+/*
+___  ___               _                   
+|  \/  |              | |                  
+| .  . | ___ _ __ ___ | |__   ___ _ __ ___ 
+| |\/| |/ _ \ '_ ` _ \| '_ \ / _ \ '__/ __|
+| |  | |  __/ | | | | | |_) |  __/ |  \__ \
+\_|  |_/\___|_| |_| |_|_.__/ \___|_|  |___/
+                                                                              
+*/
+
+.members-team-name {
+  margin-left: 30px;
+}
+
+.members-team-outer-container {
+  margin-top: 20px;
+}
+
+.member-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 3px 15px 3px 10px;
+}
+
+.members-profile-image {
+  width: 100px;
+  border-radius: 50%;
+}
+
+.member-name {
+  margin: 4px 0 0 0;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: larger;
+}
+
+.member-title {
+  margin: 0;
+  font-size: medium;
+}
+
+.members-team-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin: 0 30px 0 30px;
+  padding: 20px;
+  background-color: rgba(230, 255, 233, 0.6);
+}

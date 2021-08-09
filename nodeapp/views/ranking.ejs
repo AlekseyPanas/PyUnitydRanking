@@ -27,7 +27,7 @@
                     <% teams.sort((a,b) => {if (!(!!a.hackathon_points)) {return 1;} else if (!(!!b.hackathon_points)) {return -1;} else {return b.hackathon_points-a.hackathon_points;} } ).forEach((team) => { %>
                         <div class="group-container grad">
                             <h2 class="group-name"> <%= team.team_name %> </h2>
-                            <p class="names-list"> <%= team.members.join(", ") %> </p>
+                            <p class="names-list"> <%= team.members.map((i) => i.user_name).join(", ") %> </p>
                             <h2 class="points-container"> <span class="points-title"> Points: <i> </span> <span class="points-value"> <%- !!team.hackathon_points ? team.hackathon_points : "-&#8734" %> </span> </i> </h2>
                         </div>
                     <% }); %>
