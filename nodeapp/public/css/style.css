@@ -592,3 +592,9 @@ ___  ___               _
   padding: 20px;
   background-color: rgba(230, 255, 233, 0.6);
 }
+
+#nopythons {
+  display: block;
+  margin: 50px auto 0 auto;
+  width: 40vw;
+}

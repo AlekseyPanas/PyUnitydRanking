@@ -24,7 +24,7 @@ $(document).ready(() => {
     // Readjust on window resize
     $(window).on("resize", onResize);
     // An extra precaution yknow?
-    setTimeout(onResize, 50);
+    setTimeout(onResize, 100);
 })
 // Call the function before page loads
 onResize();
