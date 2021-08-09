@@ -39,6 +39,10 @@ router.get('/ranking', async (req, res, next) => {
 router.get('/ranking/:year_id', async (req, res, next) => {
   let years = await db.get_years();
   let selected_year = years.filter((yr) => {return yr.year_id == req.params.year_id})[0];
+  // If year doesnt exist, redirect to latest
+  if (!selected_year) {
+    res.redirect("/members/" + (await getLatestYear()).year_id);
+  };
 
   res.render('ranking', {
     page: "Rankings",
@@ -98,6 +102,10 @@ router.get('/members', async (req, res, next) => {
 router.get('/members/:year_id', async (req, res, next) => {
   let years = await db.get_years();
   let selected_year = years.filter((yr) => {return yr.year_id == req.params.year_id})[0];
+  // If year doesnt exist, redirect to latest
+  if (!selected_year) {
+    res.redirect("/members/" + (await getLatestYear()).year_id);
+  };
 
   res.render('members', {
     page: "Members",
