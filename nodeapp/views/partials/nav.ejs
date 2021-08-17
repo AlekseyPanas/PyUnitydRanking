@@ -4,14 +4,26 @@
     <div id="nav-inner-flex">
 
         <div id="nav-inner-container">
-            <div id="nav-button-container">
+            <div id="nav-logo-container"> 
                 <img id="nav-logo" src="/images/logo/logo_nav.png"> </img>
+            </div>
+
+            <div id="nav-button-container">
+                <!--<img id="nav-logo" src="/images/logo/logo_nav.png"> </img>-->
 
                 <button class="nav-button" onclick="location.href='/';"> Home </button>
                 <button class="nav-button" onclick="location.href='/about';"> About </button>
                 <button class="nav-button" onclick="location.href='/ranking';"> Rankings </button>
                 <button class="nav-button" onclick="location.href='/members';"> Members </button>
                 <button class="nav-button" onclick="location.href='/projects';"> Projects </button>
+
+            </div>
+
+            <div id="nav-login-container">
+                <button id="nav-login" onclick="location.href='/login';"> 
+                    <span id="sign-in"> Sign In </span> 
+                    <i id="sign-in-icon" class="fas fa-sign-in-alt"></i> 
+                </button>
             </div>
         </div>
     </div>

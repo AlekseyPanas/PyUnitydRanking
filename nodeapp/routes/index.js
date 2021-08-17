@@ -19,6 +19,7 @@ async function getLatestYear() {
 
 /* GET home page. */
 router.get('/', async (req, res, next) => {
+  console.log(req.session.session_item);
   res.render('index', { 
     page: "Home", 
     articles: await db.get_latest_articles(process.env.ARTICLE_BATCH_SIZE)
