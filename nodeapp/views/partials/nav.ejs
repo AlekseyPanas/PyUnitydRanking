@@ -20,10 +20,21 @@
             </div>
 
             <div id="nav-login-container">
-                <button id="nav-login" onclick="location.href='/login';"> 
-                    <span id="sign-in"> Sign In </span> 
-                    <i id="sign-in-icon" class="fas fa-sign-in-alt"></i> 
-                </button>
+                <% if (!!account) { %>
+                    <button id="nav-login" onclick="location.href='/logout';"> 
+                        <span id="sign-in"> Logout </span> 
+                        <i id="sign-in-icon" class="fas fa-sign-in-alt"></i> 
+                    </button>
+
+                    <a href="/dashboard">
+                        <img id="nav-profile-image" src=" <%= account.profile_image_path %> "> </img>
+                    </a>
+                <% } else { %>
+                    <button id="nav-login" onclick="location.href='/login';"> 
+                        <span id="sign-in"> Login </span> 
+                        <i id="sign-in-icon" class="fas fa-sign-in-alt"></i> 
+                    </button>
+                <% } %>
             </div>
         </div>
     </div>

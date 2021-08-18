@@ -15,9 +15,9 @@
                 <h4 id="login-email">Login</h4>
 
                 <p id="login-error-text"> <i class="fas fa-exclamation-circle"></i> Credentials Invalid </p>
-                <form id="login-field-container">
-                    <input placeholder="Email" class="login-field" id="login-email-field" type="email"></input>
-                    <input placeholder="Password" class="login-field" id="login-password-field" type="password"></input>
+                <form id="login-field-container" method="POST" action="/login">
+                    <input name="email" placeholder="Email" class="login-field" id="login-email-field" type="email"></input>
+                    <input name="password" placeholder="Password" class="login-field" id="login-password-field" type="password"></input>
                     <button type=submit id="login-button"><span class="login-button-noselect">Login</span><div id="login-button-circle"></div></button>
                 </form>
 

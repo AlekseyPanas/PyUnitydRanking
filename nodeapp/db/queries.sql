@@ -1,5 +1,15 @@
 /* Build Tables 
    ============ */
+CREATE TABLE "accounts" (
+	"account_id" INTEGER PRIMARY KEY ASC,
+    "display_name" TEXT,
+    "email" TEXT,
+    "password" TEXT,
+    "user_id" INTEGER, /* Links to users db entry if this account belongs to someone who was part of the BTHS club */
+    "profile_image_path" TEXT, /* Web image URL or relative to public folder */
+    "is_account_finalized" INTEGER
+);
+
 CREATE TABLE "users" (
 	"user_id" INTEGER PRIMARY KEY ASC,
     "user_name" TEXT

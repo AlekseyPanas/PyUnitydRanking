@@ -131,23 +131,34 @@ body {
 }
 
 #nav-login-container {
+  position: relative;
   display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: flex-end;
   width: 100px;
 }
 
+#nav-profile-image {
+  border-radius: 50%;
+  width: 30px;
+  margin-right: 8px;
+}
+
 #nav-login {
+  position: relative;
   display: flex;
+  justify-content: flex-end;
   align-items: center;
-  justify-content: center;
-  width: 45%;
+  width: 85px;
   margin-right: 10px;
   background: none;
   border: none;
   cursor: pointer;
   color: white;
   height: 30px;
+
   transition: all .2s ease-in;
   -moz-transition: all .2s ease-in;
   -o-transition: all .2s ease-in;
@@ -156,8 +167,9 @@ body {
 #nav-login:focus {
   outline: none;
 }
-#nav-login:hover {
-  width: 100%;
+#nav-login:hover #sign-in {
+  /*width: 100%;*/
+  max-width: 100%;
 }
 
 #sign-in {
@@ -165,10 +177,20 @@ body {
   margin-right: 5px;
   overflow-x: hidden;
   white-space: nowrap;
+  max-width: 0;
+  position: absolute;
+  display: block;
+  right: 30px;
+
+  transition: all .4s ease-in;
+  -moz-transition: all .4s ease-in;
+  -o-transition: all .4s ease-in;
+  -webkit-transition: all .4s ease-in;
 } 
 
 #sign-in-icon {
   font-size: 160%;
+  position: relative;
 }
 
 .nav-button {
@@ -675,10 +697,9 @@ ___  ___               _
 
 #login-button {
   margin-top: 10px;
-  width: 50%;
   background: rgb(62, 61, 80);
   height: 30px;
-  min-width: 75px;
+  width: 85px;
   border: none;
   border-radius: 10px;
   color: #eee;
@@ -768,6 +789,69 @@ ___  ___               _
 } .login-field-error {
   border-color: darkred;
 }
-/*.login-field::placeholder {
+
+/*
+ _____ ______ _____  ___ _____ _____    ___  _____  _____ 
+/  __ \| ___ \  ___|/ _ \_   _|  ___|  / _ \/  __ \/  __ \
+| /  \/| |_/ / |__ / /_\ \| | | |__   / /_\ \ /  \/| /  \/
+| |    |    /|  __||  _  || | |  __|  |  _  | |    | |    
+| \__/\| |\ \| |___| | | || | | |___  | | | | \__/\| \__/\
+ \____/\_| \_\____/\_| |_/\_/ \____/  \_| |_/\____/ \____/
+*/
+
+#cracc-inner-container {
+  width: 100%;
+  padding: 0 0 50px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#cracc-head-container {
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 15px;
+  background-color: white;
+  border-radius: 20px;
+}
+
+#cracc-profile-image {
+  width: 70px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+#cracc-head-text-container {
+
+}
+
+#cracc-welcome-text {
+
+}
+
+#cracc-email {
+
+}
+
+#cracc-form {
+  padding: 10px 30px 30px 30px;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 231px;
+}
+
+.cracc-error {
+  font-size: small;
   color: red;
-}*/
+  margin: 0;
+  display: none;
+  opacity: 1;
+}

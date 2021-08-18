@@ -6,19 +6,20 @@ const write_query = async (db, query, params=[]) => {
 
     // Creates while loop control variable
     let valid = false;
+    let response;
     // Attempts to run query repeatedly until it works
     while (!valid) {
         // Sets initially to true (innocent until proven guilty)
         valid = true;
         // inserts into database and catches error (specifically the BUSY error)
-        let response = await db.run(query, params).catch(err => {valid = false; /* Sets valid to false on error */ });
+        response = await db.run(query, params).catch(err => {valid = false; /* Sets valid to false on error */ });
     };
 
     // Sends back db response (error if failed)
     return response;
 }
 
-// Retrieves 5 latest articles
+// Retrieves x latest articles
 const get_latest_articles = async (how_many) => {
     // Opens connection
     let db = await sqlite3.open('./db/db.db');
@@ -135,10 +136,95 @@ const get_teams_in_year = async (year_id) => {
     return teams;
 }
 
+/*
+  ___                            _       
+ / _ \                          | |      
+/ /_\ \ ___ ___ ___  _   _ _ __ | |_ ___ 
+|  _  |/ __/ __/ _ \| | | | '_ \| __/ __|
+| | | | (_| (_| (_) | |_| | | | | |_\__ \
+\_| |_/\___\___\___/ \__,_|_| |_|\__|___/
+*/
+
+// Creates an unfinished account entry with identity email (and optional profile pic)
+// This account will be finalized within the account creation page
+const create_unfinalized_account = async (email, profile_image=null) => {
+    // Opens connection
+    let db = await sqlite3.open('./db/db.db');
+
+    let response;
+    // Inserts email and the optional profile image into new entry
+    if (!!profile_image) {
+        response = await write_query(db, "INSERT INTO accounts (email, profile_image_path) VALUES (?, ?);", [email, profile_image])
+    } else {
+        response = await write_query(db, "INSERT INTO accounts (email) VALUES (?);", [email])
+    }   
+
+    // Closes connection
+    db.close();
+
+    // Returns id of account
+    return response.lastID;
+}
+
+// Finalizes an unfinalized account entry based on id
+const finalize_account = async (account_id, display_name, password_hash) => {
+    // Opens connection
+    let db = await sqlite3.open('./db/db.db');
+
+    let response = await write_query(db, `UPDATE accounts SET 
+                                            display_name = ?, 
+                                            password = ?, 
+                                            is_account_finalized = 1 
+                                            WHERE account_id = ?;`, [display_name, password_hash, account_id])
+
+    // Closes connection
+    db.close();
+
+    return response;
+}
+
+const get_account_by_id = async (account_id) => {
+    // Opens connection
+    let db = await sqlite3.open('./db/db.db');
+
+    // Gets account matching the ID (hopefully only 1 account comes up)
+    let account = await db.all("SELECT account_id, display_name, email, password, user_id, profile_image_path, is_account_finalized FROM accounts WHERE account_id = ?;", [account_id])
+
+    // Closes connection
+    db.close();
+
+    if (!!account.length) {
+        return account[0];
+    } else {
+        return null;
+    }
+}
+
+const get_account_by_email = async (email) => {
+    // Opens connection
+    let db = await sqlite3.open('./db/db.db');
+
+    // Gets account matching the ID (hopefully only 1 account comes up)
+    let account = await db.all("SELECT account_id, display_name, email, password, user_id, profile_image_path, is_account_finalized FROM accounts WHERE email = ?;", [email])
+
+    // Closes connection
+    db.close();
+
+    if (!!account.length) {
+        return account[0];
+    } else {
+        return null;
+    }
+}
+
 module.exports = {
     get_latest_articles: (how_many) => get_latest_articles(how_many),
     get_article_range: (below_ID_exclusive, how_many) => get_article_range(below_ID_exclusive, how_many),
     get_article_by_url: (url) => get_article_by_url(url),
     get_years: () => get_years(),
-    get_teams_in_year: (year_id) => get_teams_in_year(year_id)
+    get_teams_in_year: (year_id) => get_teams_in_year(year_id),
+    create_unfinalized_account: (email, profile_image=null) => create_unfinalized_account(email, profile_image),
+    finalize_account: (account_id, display_name, password_hash) => finalize_account(account_id, display_name, password_hash),
+    get_account_by_email: (email) => get_account_by_email(email),
+    get_account_by_id: (account_id) => get_account_by_id(account_id)
 };

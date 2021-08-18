@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <% include partials/head %>
+    <% include partials/scripts %>
+    <% include partials/bootstrap %>
+
+    <body>
+        <% include partials/nav %>
+
+        <div id="main-container">
+            <p> This is the dashboard page </p>
+            <p> Account ID: <%= account.account_id %> </p>
+            <p> Email: <%= account.email %> </p>
+            <p> Display Name: <%= account.display_name %> </p>
+            <p> Is Finalized: <%= account.is_account_finalized %> </p>
+            <img style="border-radius: 50%;" src=" <%= account.profile_image_path %> "> </img>
+        </div>
+    </body>
+
+    <% include partials/footer %>
+
+</html>
