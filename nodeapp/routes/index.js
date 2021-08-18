@@ -124,7 +124,7 @@ router.get('/projects', async (req, res, next) => {
 
 
 /* GET Login Page */
-router.get('/login', async (req, res, next) => {
+router.all('/login', async (req, res, next) => {
   res.render("login", {
     page: "Login",
     domain: process.env.DOMAIN
@@ -132,9 +132,18 @@ router.get('/login', async (req, res, next) => {
 });
 
 
+/* POST google login info and redirect to account creation */
+router.post('/google-login', async (req, res, next) => {
+  
+  let content = req.body;
+
+  res.redirect("/create-account");
+});
+
+
 /* GET Account creation finalization page */
-router.post('/create-account', async (req, res, next) => {
-  console.log(req.body);
+router.get('/create-account', async (req, res, next) => {
+
   res.render("create_account", {
     page: "Create Account"
   })

@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en"> 
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <% include partials/head %>
     <% include partials/scripts %>
     <% include partials/bootstrap %>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="/javascripts/login.js"></script>
 
     <body>
         <% include partials/nav %>
@@ -13,17 +14,18 @@
             <div id="login-container">
                 <h4 id="login-email">Login</h4>
 
-                <div id="login-field-container">
+                <p id="login-error-text"> <i class="fas fa-exclamation-circle"></i> Credentials Invalid </p>
+                <form id="login-field-container">
                     <input placeholder="Email" class="login-field" id="login-email-field" type="email"></input>
                     <input placeholder="Password" class="login-field" id="login-password-field" type="password"></input>
                     <button type=submit id="login-button"><span class="login-button-noselect">Login</span><div id="login-button-circle"></div></button>
-                </div>
+                </form>
 
-                <!-- Google Login Stuff data-login_uri="<%= domain %>/create-account" -->
+                <!-- Google Login Stuff -->
                 <div id="g_id_onload"
                     data-client_id="316113013888-htm69ki2ih36kooesultai69jr0k94de.apps.googleusercontent.com"
                     
-                    data-login_uri="https://25ac379e7654.ngrok.io/create-account"
+                    data-login_uri= <%= domain + "/google-login" %>
                     data-ux_mode="redirect"
                     data-auto_prompt="false">
                 </div>

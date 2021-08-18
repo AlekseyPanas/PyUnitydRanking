@@ -667,7 +667,7 @@ ___  ___               _
 }
 
 #login-field-container {
-  margin: 10px 0 30px 0;
+  margin: 0 0 30px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -730,17 +730,23 @@ ___  ___               _
   border-bottom: 2px solid #eee;
 }
 
-#login-email {
+#login-error-text {
+  font-size: small;
+  color: darkred;
+  margin: 0;
+  opacity: 0;
 
+  transition: all .2s ease-in;
+  -moz-transition: all .2s ease-in;
+  -o-transition: all .2s ease-in;
+  -webkit-transition: all .2s ease-in;
 }
 
-#login-email-field {
+#login-email {}
 
-}
+#login-email-field {}
 
-#login-password-field {
-
-}
+#login-password-field {}
 
 .login-field {
   margin: 10px 0;
@@ -759,6 +765,8 @@ ___  ___               _
 } .login-field:focus {
   outline: none;
   border-color: royalblue;
+} .login-field-error {
+  border-color: darkred;
 }
 /*.login-field::placeholder {
   color: red;
