@@ -36,6 +36,7 @@ function hashPassword(password) {
 
 /* GET home page. */
 router.get('/', async (req, res, next) => {
+    // Gets account for nav bar purposes
     let account = await db.get_account_by_id(req.session.account_id);
 
     res.render('index', {
