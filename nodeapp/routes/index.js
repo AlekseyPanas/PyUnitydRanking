@@ -19,7 +19,6 @@ async function getLatestYear() {
 
 /* GET home page. */
 router.get('/', async (req, res, next) => {
-  console.log(req.session.session_item);
   res.render('index', { 
     page: "Home", 
     articles: await db.get_latest_articles(process.env.ARTICLE_BATCH_SIZE)
@@ -33,8 +32,6 @@ router.get('/ranking', async (req, res, next) => {
   // Redirects to latest year page
   res.redirect("/ranking/" + (await getLatestYear()).year_id);
 });
-
-
 
 /* GET individual rankings pages */
 router.get('/ranking/:year_id', async (req, res, next) => {
@@ -98,7 +95,6 @@ router.get('/members', async (req, res, next) => {
   res.redirect("/members/" + (await getLatestYear()).year_id);
 });
 
-
 /* GET individual rankings pages */
 router.get('/members/:year_id', async (req, res, next) => {
   let years = await db.get_years();
@@ -124,6 +120,30 @@ router.get('/projects', async (req, res, next) => {
   res.render("projects", {
     page: "Projects"
   });
+});
+
+
+/* GET Login Page */
+router.get('/login', async (req, res, next) => {
+  res.render("login", {
+    page: "Login",
+    domain: process.env.DOMAIN
+  })
+});
+
+
+/* GET Account creation finalization page */
+router.post('/create-account', async (req, res, next) => {
+  console.log(req.body);
+  res.render("create_account", {
+    page: "Create Account"
+  })
+});
+
+
+/* GET Dashboard */
+router.get('/dashboard', async (req, res, next) => {
+
 });
 
 /*
