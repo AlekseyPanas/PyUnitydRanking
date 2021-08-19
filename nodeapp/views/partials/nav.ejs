@@ -5,7 +5,7 @@
 
         <div id="nav-inner-container">
             <div id="nav-logo-container"> 
-                <img id="nav-logo" src="/images/logo/logo_nav.png"> </img>
+                <a href="/"><img id="nav-logo" src="/images/logo/logo_nav.png"> </img></a>
             </div>
 
             <div id="nav-button-container">
@@ -23,7 +23,7 @@
                 <% if (!!account) { %>
                     <button id="nav-login" onclick="location.href='/logout';"> 
                         <span id="sign-in"> Logout </span> 
-                        <i id="sign-in-icon" class="fas fa-sign-in-alt"></i> 
+                        <i id="sign-in-icon" class="fas fa-sign-out-alt"></i> 
                     </button>
 
                     <a href="/dashboard">

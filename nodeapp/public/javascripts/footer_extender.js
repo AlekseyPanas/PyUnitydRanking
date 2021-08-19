@@ -3,6 +3,8 @@
 // This is only needed if the page contents dont extend the footer themselves
 
 function onResize () {
+    console.log("SIZE CALLED");
+
     // Calculates height of page content
     let content_height = 0;
 
@@ -10,20 +12,22 @@ function onResize () {
     $("body").children().map((i, itm) => {
         element_height = parseInt($(itm).css("margin-top")) + parseInt($(itm).css("margin-bottom")) + $(itm).innerHeight();
         
-        console.log(itm.className);
-        console.log(itm.id);
-        console.log(element_height);
-        
         content_height += element_height;
     });
-    console.log("-----------------------")
 
     // Calculates pixels from the bottom of the screen
     let pixels_till_bottom = $(window).height() - content_height;
     
     // If there is space to the bottom of the screen, shift the footer to the bottom
     if (pixels_till_bottom > 0) {
-        $("#footer").css("top", pixels_till_bottom.toString() + "px");
+        let height = parseInt($("#footer").css("margin-top")) + parseInt($("#footer").css("margin-bottom")) + $("#footer").innerHeight();
+        
+        $("#footer").css("top",($(window).height() - height).toString() + "px");
+    } else {
+        // Ensured relative position
+        $("#footer").css("transition", "none");
+        $("#footer").css("position", "relative");
+        $("#footer").css("top", "0px");
     }
 }
 
@@ -32,4 +36,7 @@ $(window).on("load", () => {
     onResize();
     // Readjust on window resize
     $(window).on("resize", onResize);
-})
+    $("#main-container").on("DOMSubtreeModified", onResize);
+});
+$(document).on("ready", () => {onResize();});
+onResize();

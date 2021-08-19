@@ -1,14 +1,9 @@
 $(document).ready(() => {
 
-    // Prevents enter key form submission
+    // Removes error on typing
     $("form input").keydown((e) => {
         $("#login-error-text").css("opacity", "0");
         $(".login-field").removeClass("login-field-error");
-
-        if (!!e && e.keyCode == 13) {
-            e.preventDefault();
-            return false;
-        }
     })
 
     // Validates form submission
