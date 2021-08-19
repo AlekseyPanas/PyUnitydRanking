@@ -954,4 +954,138 @@ ______  ___   _____ _   _ ______  _____  ___  ____________
 |___/ \_| |_/\____/\_| |_/\____/  \___/\_| |_/\_| \_|___/ 
 */
 
+#dashboard-container {
+  margin: auto;
+  margin-bottom: 20px;
+  width: 1200px;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 3px 3px 8px 1px rgba(0, 0, 0, 0.5);
+  border-radius: 30px;
+}
 
+#dash-top-container {
+  background-color: rgba(159, 216, 204, 0.8);
+  width: 100%;
+  padding: 40px;
+  box-shadow: 0px 3px 7px 1px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 30px 30px 0 0;
+}
+
+#dash-top-left {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  /*justify-content: center;*/
+  align-items: center;
+  min-width: 250px;
+}
+
+#dash-top-right {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  box-shadow: inset 3px 3px 8px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  min-width: 250px;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+#dash-profile-img {
+  border-radius: 50%;
+  height: 120px;
+  transition: all .2s ease-in;
+} #dash-profile-img:hover {
+  
+}
+
+#dash-display-name {
+  margin-left: 20px;
+  font-size: calc(25px + 1.5vw);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+@media screen and (max-width: 1200px) {
+  #dashboard-container {
+    width: 95%;
+  }
+}
+@media screen and (max-width: 760px) {
+  #dash-display-name {
+    /*margin: 0;*/
+  }
+  #dash-top-right {
+    justify-content: center;
+  }
+  #dash-top-left {
+    justify-content: center;
+  } 
+  #dash-top-container {
+    justify-content: center;
+  }
+}
+
+
+#dash-main-container {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.dash-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-bottom: 40px;
+}
+
+.dash-section-header {
+  margin: 0 0 0 10px;
+}
+
+.dash-bths-year {
+  justify-self: center;
+  margin: 0 auto;
+}
+
+.dash-bths-year-display {
+  padding: 15px;
+  border-radius: 15px;
+  background-color: white;
+  width: 100%
+}
+
+#admin-box {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.admin-panel {
+  padding: 2vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px 5px 10px 10px;
+  border-width: 2px 0 0 2px;
+  border-style: solid;
+  border-color: gray;
+  background-color: white;
+  margin: 1vw;
+}

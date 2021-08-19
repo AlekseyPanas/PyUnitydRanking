@@ -8,15 +8,56 @@
         <% include partials/nav %>
 
         <div id="main-container">
-            <p> This is the dashboard page </p>
-            <p> Account ID: <%= account.account_id %> </p>
-            <p> Email: <%= account.email %> </p>
-            <p> Display Name: <%= account.display_name %> </p>
-            <p> Is Finalized: <%= account.is_account_finalized %> </p>
-            <img style="border-radius: 50%;" src=" <%= account.profile_image_path %> "> </img>
+            <div id="dashboard-container">
+                <div id="dash-top-container">
+                    <div id="dash-top-left">
+                        <img id="dash-profile-img" src=" <%= account.profile_image_path %> "> </img>
+                        <h1 id="dash-display-name"> <%= account.display_name %> </h1>
+                    </div>
+                    
+                    <div id="dash-top-right">
+                        <h6>No Awards Yet :(</h6>
+                    </div>
+                </div>
+                
+                <div id="dash-main-container">
+                    <!-- BTHS Section -->
+                    <div class="dash-section">
+                        <h2 class="dash-section-header"> BTHS </h2>
+                        <hr>
+
+                        <h4 class="dash-bths-year"> 2020-2021 </h4>
+                        <div class="dash-bths-year-display">
+                            <p> Stuff </p>
+                        </div>
+                    </div>
+
+                    <!-- Codebrawl Section -->
+                    <div class="dash-section">
+                        <h2 class="dash-section-header"> CodeBrawl </h2>
+                        <hr>
+
+                        <h6 style="margin:auto;"> Coming Soon </h6>
+                    </div>
+
+                    <!-- Admin Section -->
+                    <div class="dash-section">
+                        <h2 class="dash-section-header"> Admin </h2>
+                        <hr>
+
+                        <div id="admin-box">
+                            <% include partials/admin_panels/add_year %>
+                            <% include partials/admin_panels/add_year %>
+                            <% include partials/admin_panels/add_year %>
+                            <% include partials/admin_panels/add_year %>
+                            <% include partials/admin_panels/add_year %>
+                            <% include partials/admin_panels/add_year %>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
         </div>
     </body>
-
-    <% include partials/footer %>
 
 </html>
