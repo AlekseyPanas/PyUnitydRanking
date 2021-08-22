@@ -1,0 +1,40 @@
+<div class="game-outer-container"> 
+    <div class="game-container">
+        <h4 class="game-title" > <%= game.title %> </h4>
+        <img class="game-img" src=" <%= game.cover_img_path %> "> </img>
+        
+        <p class="game-info"> By: <b class="game-author"><%= game.author %></b> </p>
+        <p class="game-info"> Released: <b class="game-release-year"><%= game.release_year %></b> </p>
+
+        <div class="game-download-container">
+            <p class="game-description"> 
+                <%= game.desc %>
+            </p>
+
+            <a target="_blank" href="<%= game.github_link %>" style="display: <%= !!game.github_link ? 'inline' : 'none' %> ;" class="download-button github_link"> 
+                <img class="download-button-icon" src="./images/download_icons/github.png"> </img>
+            </a>
+
+            <a target="_blank" href="<%= game.other_link %>" style="display: <%= !!game.other_link ? 'inline' : 'none' %> ;" class="download-button other_link"> 
+                <img style="transition-delay: <%= ((!!game.github_link) * 0.1).toString() + 's' %> ;" class="download-button-icon" src="./images/download_icons/link.png"> </img>
+            </a>
+
+            <a target="_blank" href="<%= game.roblox_link %>" style="display: <%= !!game.roblox_link ? 'inline' : 'none' %> ;" class="download-button roblox_link"> 
+                <img style="transition-delay: <%= ((!!game.github_link + !!game.other_link) * 0.1).toString() + 's' %> ;" class="download-button-icon" src="./images/download_icons/roblox.png"> </img>
+            </a>
+
+            <a target="_blank" href="<%= game.universal_download %>" style="display: <%= !!game.universal_download ? 'inline' : 'none' %> ;" class="download-button universal_download"> 
+                <img style="transition-delay: <%= ((!!game.github_link + !!game.other_link + !!game.roblox_link) * 0.1).toString() + 's' %> ;" class="download-button-icon" src="./images/download_icons/universal.png"> </img>
+            </a>
+                
+            <a target="_blank" href="<%= game.windows_download %>" style="display: <%= !!game.windows_download ? 'inline' : 'none' %> ; " class="download-button windows_download"> 
+                <img style="transition-delay: <%= ((!!game.github_link + !!game.other_link + !!game.roblox_link + !!game.universal_download) * 0.1).toString() + 's' %> ;" class="download-button-icon" src="./images/download_icons/windows.png"> </img>
+            </a>
+
+            <a target="_blank" href="<%= game.mac_download %>" style="display: <%= !!game.mac_download ? 'inline' : 'none' %> ;" class="download-button mac_download"> 
+                <img style="transition-delay: <%= ((!!game.github_link + !!game.other_link + !!game.roblox_link + !!game.universal_download + !!game.windows_download) * 0.1).toString() + 's' %> ;" class="download-button-icon" src="./images/download_icons/mac.png"> </img>
+            </a>
+
+        </div>
+    </div>
+</div>

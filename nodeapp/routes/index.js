@@ -155,9 +155,31 @@ router.get('/members/:year_id', async (req, res, next) => {
 router.get('/projects', async (req, res, next) => {
     let account = await db.get_account_by_id(req.session.account_id);
 
+    let debug_game_sample = Array.from({length: 20}, e => {return {
+        title: "",
+        cover_img_path: "https://w7.pngwing.com/pngs/407/957/png-transparent-gray-wolf-agar-io-video-game-logo-youtube-youtube-game-emblem-dragon-thumbnail.png",
+        desc: "This game card is a sample meant to demonstrate animations. Actual games coming soon",
+        author: "UnknownDev",
+        release_year: 2032,
+
+        roblox_link: (Math.random() < 0.5) ? null : "ting",
+        github_link: (Math.random() < 0.5) ? null : "ting",
+        other_link: (Math.random() < 0.5) ? null : "ting",
+
+        windows_download: (Math.random() < 0.5) ? null : "ting",
+        mac_download: (Math.random() < 0.5) ? null : "ting",
+        universal_download: (Math.random() < 0.5) ? null : "ting",
+    }});
+    for (i=0; i<debug_game_sample.length; i++) {
+        debug_game_sample[i].title = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10) + i.toString();
+    }
+    console.log(debug_game_sample);
+
     res.render("projects", {
         page: "Projects",
-        account: account
+        account: account,
+        games_per_page: process.env.PROJECT_PAGE_GAMES_PER_PAGE,
+        games: debug_game_sample
     });
 });
 
@@ -337,6 +359,30 @@ router.post("/ajax/logincheck", async (req, res, next) => {
         // Login failed
         res.send("0");
     }
+});
+
+
+router.post("/ajax/load-page", async (req, res, next) => {
+    let data = req.body;
+    console.log(data);
+
+    res.render("partials/project_game_card", {
+        game: {
+            title: "Whos your Daddy",
+            cover_img_path: "https://w7.pngwing.com/pngs/407/957/png-transparent-gray-wolf-agar-io-video-game-logo-youtube-youtube-game-emblem-dragon-thumbnail.png",
+            desc: "Find who your daddy is without getting caught",
+            author: "UnknownDev",
+            release_year: 2020,
+
+            roblox_link: null,
+            github_link: "Hello",
+            other_link: null,
+
+            windows_download: null,
+            mac_download: null,
+            universal_download: "Yep",
+        }
+    });
 })
 
 module.exports = router;

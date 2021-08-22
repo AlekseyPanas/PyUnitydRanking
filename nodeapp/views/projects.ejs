@@ -3,12 +3,38 @@
     <% include partials/head %>
     <% include partials/scripts %>
     <% include partials/bootstrap %>
+    <script> 
+        const games_arr = <%- JSON.stringify(games) %> 
+        const games_per_page = <%= games_per_page %>
+    </script>
+    <script src="/javascripts/projects.js"></script>
 
     <body>
         <% include partials/nav %>
 
         <div id="main-container">
-            
+            <div id="proj-search-container">
+                <input id="proj-search-bar" type=text> </input>
+            </div>
+
+            <div id="proj-inner-cont">
+                
+                <% if (games.length < games_per_page) { %>
+                    <% games.forEach((game) => { %>
+                        <% include partials/project_game_card %>
+                    <% }); %>
+                <% } else { %>
+                    <% let game; %>
+                    <% for (i=0; i < games_per_page; i++) { %>
+                        <% game = games[i]; %>
+                        <% include partials/project_game_card %>
+                    <% } %>
+                <% } %>
+
+            </div>
+
+            <h3 class="proj-arrow" id="proj-arrow-right"> <i class="fas fa-arrow-right"></i> </h3>
+            <h3 class="proj-arrow" id="proj-arrow-left"> <i class="fas fa-arrow-left"></i> </h3>
         </div>
     </body>
 

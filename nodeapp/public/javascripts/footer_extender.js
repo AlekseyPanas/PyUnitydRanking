@@ -3,8 +3,6 @@
 // This is only needed if the page contents dont extend the footer themselves
 
 function onResize () {
-    console.log("SIZE CALLED");
-
     // Calculates height of page content
     let content_height = 0;
 
