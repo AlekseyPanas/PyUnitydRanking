@@ -12,6 +12,9 @@ function onResize () {
         
         content_height += element_height;
     });
+    //console.log(content_height);
+    //console.log(document.documentElement.scrollHeight);
+    //content_height = document.documentElement.scrollHeight;
 
     // Calculates pixels from the bottom of the screen
     let pixels_till_bottom = $(window).height() - content_height;

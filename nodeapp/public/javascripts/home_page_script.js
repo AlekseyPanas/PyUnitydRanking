@@ -17,15 +17,7 @@ $(document).ready(() => {
                 $("#youve-hit-bottom").css("display", "unset");
             } else {
                 // Loads new articles into DOM
-                data.forEach((itm) => {console.log(itm.cover_image_path);$(".article-cover-container").last().after(`<div id="` +  itm.article_id + `" class="article-cover-container"> 
-                            <div class="article-cover-text-container">
-                                <h2 class="article-cover-title"> <a href="/article/` + itm.article_url_title + `">` + itm.article_title + `</a> </h2>
-                                <p class="article-cover-description">` + itm.summary + `</p>
-                            </div>
-                            <div class="article-cover-image-container">` +
-                        (!!itm.cover_image_path ? `<img class="article-cover-image" src="` + itm.cover_image_path + `"> </img>` : "") + 
-                    `</div>
-                </div>`)})
+                data.forEach((itm) => {console.log(itm);$(".article-cover-container").last().after(itm)});
 
                 // Resets new ID
                 setEarliestID();

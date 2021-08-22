@@ -101,27 +101,27 @@ function repopulate_page(page, games_per_page, current_games, reanimate=false) {
             } else {$(element).find(".github_link").css("display", "none");}
             if (!!cur_game.other_link) {
                 $(element).find(".other_link").css("display", "inline");
-                $(element).find(".other_link").css("transition-delay", 
+                $(element).find(".other_link").find(".download-button-icon").css("transition-delay", 
                 ((!!cur_game.github_link) * 0.1).toString() + 's');
             } else {$(element).find(".other_link").css("display", "none");}
             if (!!cur_game.roblox_link) {
                 $(element).find(".roblox_link").css("display", "inline");
-                $(element).find(".roblox_link").css("transition-delay", 
+                $(element).find(".roblox_link").find(".download-button-icon").css("transition-delay", 
                 ((!!cur_game.github_link + !!cur_game.other_link) * 0.1).toString() + 's');
             } else {$(element).find(".roblox_link").css("display", "none");}
             if (!!cur_game.universal_download) {
                 $(element).find(".universal_download").css("display", "inline");
-                $(element).find(".universal_download").css("transition-delay", 
+                $(element).find(".universal_download").find(".download-button-icon").css("transition-delay", 
                 ((!!cur_game.github_link + !!cur_game.other_link + !!cur_game.roblox_link) * 0.1).toString() + 's');
             } else {$(element).find(".universal_download").css("display", "none");}
             if (!!cur_game.windows_download) {
                 $(element).find(".windows_download").css("display", "inline");
-                $(element).find(".windows_download").css("transition-delay", 
+                $(element).find(".windows_download").find(".download-button-icon").css("transition-delay", 
                 ((!!cur_game.github_link + !!cur_game.other_link + !!cur_game.roblox_link + !!cur_game.universal_download) * 0.1).toString() + 's');
             } else {$(element).find(".windows_download").css("display", "none");}
             if (!!cur_game.mac_download) {
                 $(element).find(".mac_download").css("display", "inline");
-                $(element).find(".mac_download").css("transition-delay", 
+                $(element).find(".mac_download").find(".download-button-icon").css("transition-delay", 
                 ((!!cur_game.github_link + !!cur_game.other_link + !!cur_game.roblox_link + !!cur_game.universal_download + !!cur_game.windows_download) * 0.1).toString() + 's');
             } else {$(element).find(".mac_download").css("display", "none");}
 

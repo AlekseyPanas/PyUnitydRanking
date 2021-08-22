@@ -1,0 +1,11 @@
+<div id="<%= article.article_id %>" class="article-cover-container"> 
+    <div class="article-cover-text-container">
+        <h2 class="article-cover-title"> <a href="/article/<%= article.article_url_title %>"> <%= article.article_title %> </a> </h2>
+        <p class="article-cover-description"> <%= article.summary %> </p>
+    </div>
+    <div class="article-cover-image-container">
+        <% if (!!article.cover_image_path) { %> 
+            <img class="article-cover-image" src="<%= article.cover_image_path %>"> </img>
+        <% } %>
+    </div>
+</div>

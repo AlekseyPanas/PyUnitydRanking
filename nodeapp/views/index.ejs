@@ -8,23 +8,41 @@
     <body>
         <% include partials/large_logo %>
         <% include partials/nav %>
+        
 
         <div id="main-container">
 
             <div id="home-container">
-                <% articles.forEach((article) => { %>
-                    <div id="<%= article.article_id %>" class="article-cover-container"> 
-                        <div class="article-cover-text-container">
-                            <h2 class="article-cover-title"> <a href="/article/<%= article.article_url_title %>"> <%= article.article_title %> </a> </h2>
-                            <p class="article-cover-description"> <%= article.summary %> </p>
-                        </div>
-                        <div class="article-cover-image-container">
-                            <% if (!!article.cover_image_path) { %> 
-                                <img class="article-cover-image" src="<%= article.cover_image_path %>"> </img>
-                            <% } %>
-                        </div>
+                <div class="home-news-title">
+                    <h1> Welcome! </h1>
+                </div>
+                <div id="home-top-container">
+                    <div style="background-color: rgba(166, 117, 245, 0.521);" class="home-top-content"> 
+                        <h2> Discord Server! <a target="_blank" href=" <%= discord_server %> "><i style="color:white" class="fab fa-discord"></i></a> </h2>
+                        <p> 
+                            If you are a member of the BTHS PyUnityd club
+                            then be sure to join the discord server by clicking
+                            the icon above!
+                        </p>
                     </div>
 
+                    <div style="background-color: rgba(93, 126, 108, 0.384);" class="home-top-content"> 
+                        <h2> Intro </h2>
+                        <p> 
+                            Welcome to PyUnityd, home to the PyUnityd game development club and the
+                            soon-to-be-released CodeBrawl coding arena. Our organization currently only 
+                            resides within Brooklyn Technical HS, but expansion is on the horizon! (See about page for more info)
+                        </p>
+                    </div>
+                </div>
+
+                <div class="home-news-title">
+                    <h1> News and Announcements </h1>
+                    <hr style="margin: auto;">
+                </div>
+                
+                <% articles.forEach((article) => { %>
+                    <% include partials/article_cover %>
                 <% }); %>
 
                 <div id="show-more-container">

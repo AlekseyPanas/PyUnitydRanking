@@ -33,6 +33,19 @@ function hashPassword(password) {
 }
 
 
+// Uses app to render a given ejs template and returns an awaitable promise
+async function getRenderedPage(app, view, data) {
+    return (new Promise((resolve, reject) => {
+        app.render(view, data, (error, html) => {
+            if (!!error) {
+                reject(error);
+            } else {
+                resolve(html);
+            }
+        })
+    }));
+}
+
 
 /* GET home page. */
 router.get('/', async (req, res, next) => {
@@ -41,7 +54,9 @@ router.get('/', async (req, res, next) => {
 
     res.render('index', {
         page: "Home",
+        discord_server: process.env.DISCORD_INVITE,
         account: account,
+
         articles: await db.get_latest_articles(process.env.ARTICLE_BATCH_SIZE)
     });
 });
@@ -68,6 +83,8 @@ router.get('/ranking/:year_id', async (req, res, next) => {
     res.render('ranking', {
         page: "Rankings",
         account: account,
+        discord_server: process.env.DISCORD_INVITE,
+
         years: years,
         selected_year: selected_year,
         teams: await (db.get_teams_in_year(selected_year.year_id))
@@ -83,7 +100,8 @@ router.get('/about', async (req, res, next) => {
 
     res.render('about', { 
         page: "About",
-        account: account
+        account: account,
+        discord_server: process.env.DISCORD_INVITE,
     });
 });
 
@@ -103,6 +121,8 @@ router.get('/article/:article_url', async (req, res, next) => {
         res.render("article", {
             page: article_data.article_title,
             account: account,
+            discord_server: process.env.DISCORD_INVITE,
+
             article: article_data
         });
         // Otherwise redirects to 404
@@ -141,10 +161,12 @@ router.get('/members/:year_id', async (req, res, next) => {
 
     res.render('members', {
         page: "Members",
+        discord_server: process.env.DISCORD_INVITE,
+        account: account,
+
         years: years,
         selected_year: selected_year,
         teams: await (db.get_teams_in_year(selected_year.year_id)),
-        account: account
     });
 })
 
@@ -178,6 +200,8 @@ router.get('/projects', async (req, res, next) => {
     res.render("projects", {
         page: "Projects",
         account: account,
+        discord_server: process.env.DISCORD_INVITE,
+        
         games_per_page: process.env.PROJECT_PAGE_GAMES_PER_PAGE,
         games: debug_game_sample
     });
@@ -201,8 +225,10 @@ router.all('/login', async (req, res, next) => {
     } else {
         res.render("login", {
             page: "Login",
-            domain: process.env.DOMAIN,
-            account: account
+            discord_server: process.env.DISCORD_INVITE,
+            account: account,
+
+            domain: process.env.DOMAIN
         })
     }
 });
@@ -288,7 +314,8 @@ router.all('/create-account', async (req, res, next) => {
         else {
             res.render("create_account", {
                 page: "Create Account",
-                account: account
+                account: account,
+                discord_server: process.env.DISCORD_INVITE,
             });
         }
     } else {
@@ -307,7 +334,8 @@ router.get('/dashboard', async (req, res, next) => {
         if (!!account.is_account_finalized) {
             res.render("dashboard", {
                 page: "Dashboard",
-                account: account
+                account: account,
+                discord_server: process.env.DISCORD_INVITE,
             });
         } 
         
@@ -337,10 +365,16 @@ router.post("/ajax/get-next-articles-batch", async (req, res, next) => {
         res.send(-1);
     } else {
         // Make a long ass loop to see that beautiful loading icon
-        for (i = 0; i < 100000000; i++) { }
+        for (i = 0; i < 10000000; i++) { }
 
-        // Retrieves next batch of articles and sends them
-        res.json(await db.get_article_range(earliest_ID, process.env.ARTICLE_BATCH_SIZE));
+        // Retrieves next batch of articles
+        let articles = await db.get_article_range(earliest_ID, process.env.ARTICLE_BATCH_SIZE)
+        // Maps an async function to render the pages, and awaits all articles to be rendered
+        let sending = await Promise.all(articles.map(async (article) => {
+            return (await getRenderedPage(req.app, "partials/article_cover", {article: article}));
+        }));
+        // Sends the completed articles
+        res.json(sending);
     }
 
 });
@@ -360,29 +394,5 @@ router.post("/ajax/logincheck", async (req, res, next) => {
         res.send("0");
     }
 });
-
-
-router.post("/ajax/load-page", async (req, res, next) => {
-    let data = req.body;
-    console.log(data);
-
-    res.render("partials/project_game_card", {
-        game: {
-            title: "Whos your Daddy",
-            cover_img_path: "https://w7.pngwing.com/pngs/407/957/png-transparent-gray-wolf-agar-io-video-game-logo-youtube-youtube-game-emblem-dragon-thumbnail.png",
-            desc: "Find who your daddy is without getting caught",
-            author: "UnknownDev",
-            release_year: 2020,
-
-            roblox_link: null,
-            github_link: "Hello",
-            other_link: null,
-
-            windows_download: null,
-            mac_download: null,
-            universal_download: "Yep",
-        }
-    });
-})
 
 module.exports = router;
