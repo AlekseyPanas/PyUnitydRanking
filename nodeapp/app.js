@@ -43,7 +43,7 @@ app.use(async function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error', {page: "error", account: account});
+  res.render('error', {page: "error", account: account, discord_server: process.env.DISCORD_INVITE});
 });
 
 module.exports = app;
