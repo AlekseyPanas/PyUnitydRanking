@@ -17,7 +17,7 @@ const get_latest_articles = async (how_many) => (
         `SELECT 
         article_id, organization_id, publish_date_utc, article_title, article_url_title, 
         content_html, summary, cover_image_path, is_announcement, is_public 
-        FROM organization_articles ORDER BY article_id DESC LIMIT $1;`, [how_many])
+        FROM orgs.organization_articles ORDER BY article_id DESC LIMIT $1;`, [how_many])
     ).rows.map((art) => {
         return {
             article_id: art.article_id,
@@ -39,7 +39,7 @@ const get_article_range = async (below_ID_exclusive, how_many) => (
         `SELECT 
         article_id, organization_id, publish_date_utc, article_title, article_url_title, 
         content_html, summary, cover_image_path, is_announcement, is_public 
-        FROM organization_articles WHERE article_id < $1 ORDER BY article_id DESC LIMIT $2;`, [below_ID_exclusive, how_many])
+        FROM orgs.organization_articles WHERE article_id < $1 ORDER BY article_id DESC LIMIT $2;`, [below_ID_exclusive, how_many])
     ).rows.map((art) => {
         return {
             article_id: art.article_id,
@@ -61,7 +61,7 @@ const get_article_by_url = async (url) => {
         `SELECT 
         article_id, organization_id, publish_date_utc, article_title, article_url_title, 
         content_html, summary, cover_image_path, is_announcement, is_public 
-        FROM organization_articles WHERE article_url_title = $1;`, [url])).rows[0]
+        FROM orgs.organization_articles WHERE article_url_title = $1;`, [url])).rows[0]
     
     return !!art ? {
             article_id: art.article_id,
@@ -122,76 +122,54 @@ const get_teams_in_year = async (period_id) => {
 // Creates an unfinished account entry with identity email (and optional profile pic)
 // This account will be finalized within the account creation page
 const create_unfinalized_account = async (email, profile_image=null) => {
-    // Opens connection
-    let db = await sqlite3.open('./db/db.db');
-
     let response;
     // Inserts email and the optional profile image into new entry
     if (!!profile_image) {
-        response = await write_query(db, "INSERT INTO accounts (email, profile_image_path) VALUES (?, ?);", [email, profile_image])
+        response = await pool.query("INSERT INTO hub.hub_accounts (email, profile_image_path) VALUES ($1, $2);", [email, profile_image])
     } else {
-        response = await write_query(db, "INSERT INTO accounts (email) VALUES (?);", [email])
+        response = await pool.query("INSERT INTO hub.hub_accounts (email) VALUES ($1);", [email])
     }   
 
-    // Closes connection
-    db.close();
-
+    console.log("Response");
+    console.log(response);
     // Returns id of account
     return response.lastID;
 }
 
 // Finalizes an unfinalized account entry based on id
-const finalize_account = async (account_id, display_name, password_hash) => {
-    // Opens connection
-    let db = await sqlite3.open('./db/db.db');
+const finalize_account = async (account_id, display_name, password_hash) => (await pool.query(`UPDATE hub.hub_accounts SET 
+                                        display_name = $1, 
+                                        password = $2, 
+                                        is_account_finalized = 1 
+                                        WHERE account_id = $3;`, [display_name, password_hash, account_id]));
 
-    let response = await write_query(db, `UPDATE accounts SET 
-                                            display_name = ?, 
-                                            password = ?, 
-                                            is_account_finalized = 1 
-                                            WHERE account_id = ?;`, [display_name, password_hash, account_id])
+const get_account_by_id = async (account_id) => {// Gets account matching the ID (hopefully only 1 account comes up)
+    let account = await pool.query(`SELECT 
+                            account_id, display_name, email, password_hash, profile_image_path 
+                            FROM hub.hub_accounts WHERE account_id = $1;`, [account_id])
 
-    // Closes connection
-    db.close();
-
-    return response;
-}
-
-const get_account_by_id = async (account_id) => {
-    // Opens connection
-    let db = await sqlite3.open('./db/db.db');
-
-    // Gets account matching the ID (hopefully only 1 account comes up)
-    let account = await db.all("SELECT account_id, display_name, email, password, user_id, profile_image_path, is_account_finalized FROM accounts WHERE account_id = ?;", [account_id])
-
-    // Closes connection
-    db.close();
-
-    if (!!account.length) {
-        return account[0];
-    } else {
-        return null;
-    }
+    return !!account.length ? account[0] : null;
 }
 
 const get_account_by_email = async (email) => {
-    // Opens connection
-    let db = await sqlite3.open('./db/db.db');
-
     // Gets account matching the ID (hopefully only 1 account comes up)
-    let account = await db.all("SELECT account_id, display_name, email, password, user_id, profile_image_path, is_account_finalized FROM accounts WHERE email = ?;", [email])
+    let account = await pool.query(`SELECT account_id, display_name, email, password_hash, profile_image_path 
+                                    FROM hub.hub_accounts WHERE email = $1;`, [email])
 
-    // Closes connection
-    db.close();
-
-    if (!!account.length) {
-        return account[0];
-    } else {
-        return null;
-    }
+    return !!account.length ? account[0] : null;
 }
 
 // Export
-module.exeports = {
-    query: (sql_text, params) => pool.query(sql_text, params)
+module.exports = {
+    query: (sql_text, params) => pool.query(sql_text, params),
+    get_latest_articles: get_latest_articles,
+    get_article_range: get_article_range,
+    get_article_by_url: get_article_by_url,
+    get_time_periods: get_time_periods,
+    get_teams_in_year: get_teams_in_year,
+    create_unfinalized_account: create_unfinalized_account,
+    finalize_account: finalize_account,
+    get_account_by_email: get_account_by_email,
+    get_article_by_url: get_article_by_url,
+    get_account_by_id: get_account_by_id
 }

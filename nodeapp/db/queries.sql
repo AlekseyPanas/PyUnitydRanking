@@ -21,7 +21,7 @@ CREATE TABLE public.table_name
 
 CREATE TABLE hub.hub_accounts
 (
-    account_id integer,
+    account_id bigserial,
     display_name text,
     email text,
     password_hash text,
@@ -31,7 +31,7 @@ CREATE TABLE hub.hub_accounts
 
 CREATE TABLE orgs.organization_users
 (
-    user_id integer,
+    user_id bigserial,
     account_id integer,
     organization_id integer,
     first_name text,
@@ -43,7 +43,7 @@ CREATE TABLE orgs.organization_users
 
 CREATE TABLE orgs.organizations
 (
-    organization_id integer,
+    organization_id bigserial,
     title text,
     description text,
     head_logo_image_path text,
@@ -56,7 +56,7 @@ CREATE TABLE orgs.organizations
 
 CREATE TABLE orgs.organization_teams
 (
-    team_id integer,
+    team_id bigserial,
     organization_id integer,
     period_id integer,
     team_name text,
@@ -66,7 +66,7 @@ CREATE TABLE orgs.organization_teams
 
 CREATE TABLE orgs.organization_time_periods
 (
-    period_id integer,
+    period_id bigserial,
     organization_id integer,
     period_name text,
     is_active boolean,
@@ -75,7 +75,7 @@ CREATE TABLE orgs.organization_time_periods
 
 CREATE TABLE orgs.organization_memberships
 (
-    membership_id integer,
+    membership_id bigserial,
     user_id integer,
     period_id integer,
     team_id integer,
@@ -85,7 +85,7 @@ CREATE TABLE orgs.organization_memberships
 
 CREATE TABLE orgs.organization_projects
 (
-    project_id integer,
+    project_id bigserial,
     team_id integer,
     title text,
     cover_img_path text,
@@ -97,7 +97,7 @@ CREATE TABLE orgs.organization_projects
 
 CREATE TABLE orgs.organization_project_versions
 (
-    version_id integer,
+    version_id bigserial,
     project_id integer,
     title text,
     description_html text,
@@ -113,7 +113,7 @@ CREATE TABLE orgs.organization_project_versions
 
 CREATE TABLE orgs.organization_team_messages
 (
-    message_id integer,
+    message_id bigserial,
     team_id integer,
     sender_name text,
     message_contents text,
@@ -123,7 +123,7 @@ CREATE TABLE orgs.organization_team_messages
 
 CREATE TABLE orgs.exec_messages
 (
-    exec_message_id integer,
+    exec_message_id bigserial,
     membership_id integer,
     sender_name text,
     sender_email text,
@@ -134,7 +134,7 @@ CREATE TABLE orgs.exec_messages
 
 CREATE TABLE orgs.organization_roles
 (
-    role_id integer,
+    role_id bigserial,
     organization_id integer,
     role_name text,
     color_r integer,
@@ -150,13 +150,15 @@ CREATE TABLE orgs.organization_roles
 
 CREATE TABLE orgs.organization_role_assignments
 (
+    role_assignment_id bigserial,
     membership_id integer,
-    role_id integer
+    role_id integer,
+    PRIMARY KEY (role_assignment_id)
 );
 
 CREATE TABLE orgs.organization_articles
 (
-    article_id integer,
+    article_id bigserial,
     organization_id integer,
     publish_date_utc timestamp without time zone,
     article_title text,
@@ -171,7 +173,7 @@ CREATE TABLE orgs.organization_articles
 
 CREATE TABLE orgs.organization_assignments
 (
-    assignment_id integer,
+    assignment_id bigserial,
     organization_id integer,
     title text,
     description text,
@@ -182,7 +184,7 @@ CREATE TABLE orgs.organization_assignments
 
 CREATE TABLE orgs.organization_assignment_components
 (
-    component_id integer,
+    component_id bigserial,
     assignment_id integer,
     description text,
     is_required boolean,
@@ -192,7 +194,7 @@ CREATE TABLE orgs.organization_assignment_components
 
 CREATE TABLE orgs.organization_assignment_allocations
 (
-    allocation_id integer,
+    allocation_id bigserial,
     assignment_id integer,
     team_id integer,
     PRIMARY KEY (allocation_id)
@@ -200,7 +202,7 @@ CREATE TABLE orgs.organization_assignment_allocations
 
 CREATE TABLE orgs.organization_assignment_submissions
 (
-    submission_id integer,
+    submission_id bigserial,
     allocation_id integer,
     component_id integer,
     content_string text,
@@ -216,19 +218,27 @@ INNER JOIN teams t ON t.team_id = y.team_id
 INNER JOIN users u ON u.user_id = y.user_id;
 
 /* Create new article */
-INSERT INTO articles 
-(publish_date_string, 
-article_title, 
-article_url_title, 
-content_html, 
-summary, 
-cover_image_path) VALUES (
-'7-14-2021',
-'Test Article 2',
-'test-article-2',
-'<p> A test article </p>',
-'A test article',
-'https://techbeacon.scdn7.secure.raxcdn.com/sites/default/files/styles/article_hero_image/public/field/image/testing-trends-world-quality-report.jpg?itok=vUyONZsj'
+INSERT INTO orgs.organization_articles
+(
+	organization_id,
+	publish_date_utc, 
+	article_title, 
+	article_url_title, 
+	content_html, 
+	summary, 
+	cover_image_path,
+	is_announcement,
+	is_public
+) VALUES (
+	1,
+	'2021-08-30 18:33:00',
+	'Test Announcement 1',
+	'test-announce-3',
+	'<p> A test article </p>',
+	'A test article',
+	'https://techbeacon.scdn7.secure.raxcdn.com/sites/default/files/styles/article_hero_image/public/field/image/testing-trends-world-quality-report.jpg?itok=vUyONZsj',
+	't',
+	't'
 );
 
 /* Create new Team */
