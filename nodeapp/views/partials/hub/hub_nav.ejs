@@ -1,0 +1,41 @@
+<div id="nav-main-container">
+    <img id="nav-image" src="/images/universal/nav/nav.png" draggable="false"> </img>
+
+    <div id="nav-inner-flex">
+
+        <div id="nav-inner-container">
+            <div id="nav-logo-container"> 
+                <a href="/"><img id="nav-logo" src="/images/hub/logos/nav_logo_image.png"> </img></a>
+            </div>
+
+            <div id="nav-button-container">
+                <!--<img id="nav-logo" src="/images/logo/logo_nav.png"> </img>-->
+
+                <button class="nav-button" onclick="location.href='/';"> Home </button>
+                <button class="nav-button" onclick="location.href='/about';"> About </button>
+                <button class="nav-button" onclick="location.href='/';"> CodeBrawl </button>
+                <button class="nav-button" onclick="location.href='/';"> Courses </button>
+                <button class="nav-button" onclick="location.href='/projects';"> Projects </button>
+
+            </div>
+
+            <div id="nav-login-container">
+                <% if (!!account) { %>
+                    <button id="nav-login" onclick="location.href='/logout';"> 
+                        <span id="sign-in"> Logout </span> 
+                        <i id="sign-in-icon" class="fas fa-sign-out-alt"></i> 
+                    </button>
+
+                    <a href="/dashboard">
+                        <img id="nav-profile-image" src=" <%= account.profile_image_path %> "> </img>
+                    </a>
+                <% } else { %>
+                    <button id="nav-login" onclick="location.href='/login';"> 
+                        <span id="sign-in"> Login </span> 
+                        <i id="sign-in-icon" class="fas fa-sign-in-alt"></i> 
+                    </button>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>

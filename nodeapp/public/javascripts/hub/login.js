@@ -18,7 +18,7 @@ $(document).ready(() => {
             // Callback
             success: (reply) => {
                 if (!!parseInt(reply)) {
-                    location.href = "/dashboard";
+                    location.href = "/login";
                 } else {
                     // Displays error visuals
                     $("#login-error-text").css("opacity", "1");

@@ -1,47 +1,19 @@
 <!DOCTYPE html>
 <html lang="en"> 
-    <% include partials/head %>
-    <% include partials/scripts %>
-    <% include partials/bootstrap %>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="/javascripts/login.js"></script>
+    <% include ../partials/universal/head %>
+    <% include ../partials/universal/scripts %>
+    <% include ../partials/universal/bootstrap %>
 
     <body>
-        <% include partials/nav %>
+        <% include ../partials/hub/hub_nav %>
 
         <div id="main-container">
             
-            <div id="login-container">
-                <h4 id="login-email">Login</h4>
-
-                <p id="login-error-text"> <i class="fas fa-exclamation-circle"></i> Credentials Invalid </p>
-                <form id="login-field-container" method="POST" action="/login">
-                    <input name="email" placeholder="Email" class="login-field" id="login-email-field" type="email"></input>
-                    <input name="password" placeholder="Password" class="login-field" id="login-password-field" type="password"></input>
-                    <button type=submit id="login-button"><span class="login-button-noselect">Login</span><div id="login-button-circle"></div></button>
-                </form>
-
-                <!-- Google Login Stuff -->
-                <div id="g_id_onload"
-                    data-client_id="316113013888-htm69ki2ih36kooesultai69jr0k94de.apps.googleusercontent.com"
-                    
-                    data-login_uri= <%= domain + "/google-login" %>
-                    data-ux_mode="redirect"
-                    data-auto_prompt="false">
-                </div>
-                <div class="g_id_signin"
-                    data-type="standard"
-                    data-size="large"
-                    data-theme="outline"
-                    data-text="sign_in_with"
-                    data-shape="rectangular"
-                    data-logo_alignment="left">
-                </div>
-            </div>
+            <% include ../partials/hub/login_form %>
 
         </div>
     </body>
 
-    <% include partials/footer %>
+    <% include ../partials/hub/hub_footer %>
 
 </html>

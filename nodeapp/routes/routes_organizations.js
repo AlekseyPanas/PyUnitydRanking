@@ -5,7 +5,6 @@ module.exports = (router) => {
 
     /* GET home page. */
     router.get('/:org/', async (req, res, next) => {
-        console.log("WE ARE INDEED HERE")
         // Gets account for nav bar purposes
         let account = await db.get_account_by_id(req.session.account_id);
     

@@ -1,14 +1,10 @@
-
-
 <!DOCTYPE html>
 <html>
-    <% include partials/head %>
-    <% include partials/scripts %>
-    <% include partials/bootstrap %>
+    <% include partials/universal/head %>
+    <% include partials/universal/scripts %>
+    <% include partials/universal/bootstrap %>
 
         <body>
-            <% include partials/nav %>
-
                 <div id="main-container">
                     <h1><%= message %></h1>
                     <h2><%= error.status %></h2>
@@ -16,7 +12,4 @@
                 </div>
 
         </body>
-        
-        <% include partials/footer %>
-
 </html>

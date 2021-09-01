@@ -22,7 +22,7 @@ app.use(session({
   secret: 'shut the fuck up, itsa secret!',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: process.env.IS_HTTPS }
+  cookie: { httpOnly: !(!!process.env.IS_HTTPS) }
 }))
 
 app.use('/', indexRouter);

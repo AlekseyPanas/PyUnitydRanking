@@ -935,8 +935,6 @@ ___  ___               _
   -webkit-transition: all .2s ease-in;
 }
 
-#login-email {}
-
 #login-email-field {}
 
 #login-password-field {}
@@ -962,7 +960,13 @@ ___  ___               _
   border-color: darkred;
 }
 
-
+#login-create-prompt {
+  font-size: small;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin: 20px;
+} #login-create-prompt a {
+  color: rgb(0, 42, 156);
+}
 
 
 

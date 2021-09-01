@@ -125,15 +125,13 @@ const create_unfinalized_account = async (email, profile_image=null) => {
     let response;
     // Inserts email and the optional profile image into new entry
     if (!!profile_image) {
-        response = await pool.query("INSERT INTO hub.hub_accounts (email, profile_image_path) VALUES ($1, $2);", [email, profile_image])
+        response = await pool.query("INSERT INTO hub.hub_accounts (email, profile_image_path) VALUES ($1, $2) RETURNING account_id;", [email, profile_image])
     } else {
-        response = await pool.query("INSERT INTO hub.hub_accounts (email) VALUES ($1);", [email])
+        response = await pool.query("INSERT INTO hub.hub_accounts (email) VALUES ($1) RETURNING account_id;", [email])
     }   
 
-    console.log("Response");
-    console.log(response);
     // Returns id of account
-    return response.lastID;
+    return response.rows[0].account_id;
 }
 
 // Finalizes an unfinalized account entry based on id

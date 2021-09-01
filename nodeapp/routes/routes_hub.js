@@ -3,37 +3,37 @@ const util = require('../utils/utils.js');
 
 module.exports = (router) => {
     
+    /* GET Login Page */
+    router.all('/login', async (req, res, next) => {
+        // Checks for a redirect
+        let redirect = req.query.redirect_url;
+
+        // If user already logged in, bring them to dash or to redirect
+        if (!!req.session.account_id) {
+            res.redirect(!!redirect ? redirect : "/dashboard");
+        } else {
+            res.render("hub/login", {
+                page: "Login",
+                account: undefined,
+                discord_server: process.env.DISCORD_INVITE,
+
+                domain: process.env.DOMAIN
+            });
+        }
+    });
+
     // Destroys session and goes back to login
     router.get('/logout', async (req, res, next) => {
         req.session.destroy(() => {
             res.redirect("/login");
         });
     });
-    
-    /* GET Login Page */
-    router.all('/login', async (req, res, next) => {
-        let account = await db.get_account_by_id(req.session.account_id);
-        
-        // If user already logged in, bring them to dash
-        if (!!req.session.account_id) {
-            res.redirect("/dashboard");
-        } else {
-            res.render("login", {
-                page: "Login",
-                discord_server: process.env.DISCORD_INVITE,
-                account: account,
-
-                domain: process.env.DOMAIN
-            })
-        }
-    });
-
 
     /* POST google login info and redirect to account creation */
     router.post('/google-login', async (req, res, next) => {
 
         // Gets the middle part of the JWT, which includes all the user data
-        let userData = decodeJWT(req.body.credential)[1];
+        let userData = util.decodeJWT(req.body.credential)[1];
         console.log(userData);
 
         // Checks to see if an account entry exists
@@ -61,6 +61,8 @@ module.exports = (router) => {
 
             // Creates session (logs in the user)
             req.session.account_id = accountID;
+            console.log(req.session);
+            console.log(req.session.account_id);
 
             // Redirects to account finalization
             res.redirect("/create-account");
@@ -68,12 +70,20 @@ module.exports = (router) => {
     });
 
 
-    /* GET Account creation finalization page */
+    /* GET Account creation/finalization page */
     router.all('/create-account', async (req, res, next) => {
-        if (!!req.session.account_id) {
-            // Gets account
-            let account = await db.get_account_by_id(req.session.account_id);
+        // Gets account
+        let account = await db.get_account_by_id(req.session.account_id);
 
+        if (!(!!account)) {
+            res.render("create_account", {
+                page: "Create Account",
+                account: account,
+                discord_server: process.env.DISCORD_INVITE,
+            });
+        }
+
+        else if (!!req.session.account_id) {
             // If account was already created...
             if (!!account.is_account_finalized) {
                 res.redirect("/dashboard");
@@ -113,8 +123,6 @@ module.exports = (router) => {
                     discord_server: process.env.DISCORD_INVITE,
                 });
             }
-        } else {
-            res.redirect("/login");
         }
     });
 
@@ -131,7 +139,7 @@ module.exports = (router) => {
         let account = await db.get_account_by_email(req.body.email);
     
         // Login successful
-        if (!!account && account.password == hashPassword(req.body.password)) {
+        if (!!account && account.password == util.hashPassword(req.body.password)) {
             req.session.account_id = account.account_id;
             
             res.send("1");
