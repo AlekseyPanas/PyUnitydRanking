@@ -23,7 +23,7 @@ CREATE TABLE hub.hub_accounts
 (
     account_id bigserial,
     display_name text,
-    email text,
+    email text NOT NULL,
     password_hash text,
     profile_image_path text,
     PRIMARY KEY (account_id)

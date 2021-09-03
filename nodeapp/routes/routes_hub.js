@@ -5,27 +5,51 @@ module.exports = (router) => {
     
     /* GET Login Page */
     router.all('/login', async (req, res, next) => {
-        // Checks for a redirect
-        let redirect = req.query.redirect_url;
+        // Checks for a redirect query param and sets it to var
+        let redirect_query = req.query.login_redirect_url;
+        if (redirect_query == '/login') {  // No redirecting back to login
+            redirect_query = undefined;
+        }
+        // Checks for redirect cookie and sets it to var
+        let redirect_cookie = req.cookies.login_redirect_url
 
-        // If user already logged in, bring them to dash or to redirect
+        // If user logged in
         if (!!req.session.account_id) {
-            res.redirect(!!redirect ? redirect : "/dashboard");
+
+            // Redirects with priority: cookie, query, dashboard
+            if (!!redirect_cookie) { res.redirect(redirect_cookie); 
+            } else if (!!redirect_query) { res.redirect(redirect_query);
+            } else { res.redirect("/dashboard") }
+
         } else {
-            res.render("hub/login", {
+            // Sets a cookie to store redirect (or removes it)
+            if (!!redirect_query) {
+                res.cookie("login_redirect_url", redirect_query);
+            } else {
+                res.clearCookie("login_redirect_url");
+            }
+
+            /* ======== RENDER LOGIN ======== */
+            res.render("hub/hub_casing", {
+                // Base Casing Requirements
                 page: "Login",
                 account: undefined,
                 discord_server: process.env.DISCORD_INVITE,
+                is_logo: false,
 
-                domain: process.env.DOMAIN
+                // View name and params
+                view_name: "hub/login",
+                view_params: {
+                    domain: process.env.DOMAIN
+                }
             });
         }
     });
 
-    // Destroys session and goes back to login
+    // Destroys session and goes back to login or redirect
     router.get('/logout', async (req, res, next) => {
         req.session.destroy(() => {
-            res.redirect("/login");
+            res.redirect(req.query.logout_redirect_url ? req.query.logout_redirect_url : "/login");
         });
     });
 
@@ -34,38 +58,29 @@ module.exports = (router) => {
 
         // Gets the middle part of the JWT, which includes all the user data
         let userData = util.decodeJWT(req.body.credential)[1];
-        console.log(userData);
 
         // Checks to see if an account entry exists
-        let account = await db.get_account_by_email(userData.email);
+        let account = await db.accounts.get_account_by_email(userData.email);
         // If account exists
         if (!!account) {
 
             // Creates session (logs in the user)
             req.session.account_id = account.account_id;
 
-            // If account is finalized
-            if (account.is_account_finalized) {
-                res.redirect("/dashboard");
-            }
-            // Otherwise redirects to finalization page
-            else {
-                res.redirect("/create-account")
-            }
+            // Takes you back to login where shit'll happen
+            res.redirect("/login");
         }
+
         // If account doesn't exist
         else {
             // Creates account
-            let accountID = await db.create_unfinalized_account(userData.email, userData.picture);
-            console.log(accountID);
+            let accountID = await db.accounts.create_account(userData.email, null, null, userData.picture);
 
             // Creates session (logs in the user)
             req.session.account_id = accountID;
-            console.log(req.session);
-            console.log(req.session.account_id);
 
-            // Redirects to account finalization
-            res.redirect("/create-account");
+            // Redirects to login
+            res.redirect("/login");
         }
     });
 
@@ -124,6 +139,27 @@ module.exports = (router) => {
                 });
             }
         }
+    });
+
+
+    router.get('/about', async (req, res, next) => {
+        // Gets account
+        console.log("TEST START");
+        let account = await db.accounts.get_account_by_id(req.session.account_id);
+        console.log("TEST END");
+
+        /* ======== RENDER ABOUT ======== */
+        res.render("hub/hub_casing", {
+            // Base Casing Requirements
+            page: "About",
+            account: account,
+            discord_server: process.env.DISCORD_INVITE,
+            is_logo: true,
+
+            // View name and params
+            view_name: "hub/about",
+            view_params: {}
+        });
     });
 
     /*

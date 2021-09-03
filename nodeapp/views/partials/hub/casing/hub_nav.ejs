@@ -21,18 +21,36 @@
 
             <div id="nav-login-container">
                 <% if (!!account) { %>
-                    <button id="nav-login" onclick="location.href='/logout';"> 
+                    <button id="nav-login"> 
                         <span id="sign-in"> Logout </span> 
-                        <i id="sign-in-icon" class="fas fa-sign-out-alt"></i> 
+                        <i id="sign-in-icon" class="fas fa-sign-out-alt"></i>
+
+                        <!-- Sets logout redirect url -->
+                        <script>
+                            $("#nav-login").click((e) => {
+                                let loc = window.location.pathname
+                                location.href = '/logout?logout_redirect_url=' + loc;
+                            });
+                        </script> 
+
                     </button>
 
                     <a href="/dashboard">
                         <img id="nav-profile-image" src=" <%= account.profile_image_path %> "> </img>
                     </a>
                 <% } else { %>
-                    <button id="nav-login" onclick="location.href='/login';"> 
+                    <button id="nav-login"> 
                         <span id="sign-in"> Login </span> 
                         <i id="sign-in-icon" class="fas fa-sign-in-alt"></i> 
+
+                        <!-- Sets login redirect url -->
+                        <script>
+                            $("#nav-login").click((e) => {
+                                let loc = window.location.pathname
+                                location.href = '/login?login_redirect_url=' + loc;
+                            });
+                        </script> 
+
                     </button>
                 <% } %>
             </div>

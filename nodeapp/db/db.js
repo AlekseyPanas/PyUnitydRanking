@@ -110,53 +110,6 @@ const get_teams_in_year = async (period_id) => {
     return teams;
 }
 
-/*
-  ___                            _       
- / _ \                          | |      
-/ /_\ \ ___ ___ ___  _   _ _ __ | |_ ___ 
-|  _  |/ __/ __/ _ \| | | | '_ \| __/ __|
-| | | | (_| (_| (_) | |_| | | | | |_\__ \
-\_| |_/\___\___\___/ \__,_|_| |_|\__|___/
-*/
-
-// Creates an unfinished account entry with identity email (and optional profile pic)
-// This account will be finalized within the account creation page
-const create_unfinalized_account = async (email, profile_image=null) => {
-    let response;
-    // Inserts email and the optional profile image into new entry
-    if (!!profile_image) {
-        response = await pool.query("INSERT INTO hub.hub_accounts (email, profile_image_path) VALUES ($1, $2) RETURNING account_id;", [email, profile_image])
-    } else {
-        response = await pool.query("INSERT INTO hub.hub_accounts (email) VALUES ($1) RETURNING account_id;", [email])
-    }   
-
-    // Returns id of account
-    return response.rows[0].account_id;
-}
-
-// Finalizes an unfinalized account entry based on id
-const finalize_account = async (account_id, display_name, password_hash) => (await pool.query(`UPDATE hub.hub_accounts SET 
-                                        display_name = $1, 
-                                        password = $2, 
-                                        is_account_finalized = 1 
-                                        WHERE account_id = $3;`, [display_name, password_hash, account_id]));
-
-const get_account_by_id = async (account_id) => {// Gets account matching the ID (hopefully only 1 account comes up)
-    let account = await pool.query(`SELECT 
-                            account_id, display_name, email, password_hash, profile_image_path 
-                            FROM hub.hub_accounts WHERE account_id = $1;`, [account_id])
-
-    return !!account.length ? account[0] : null;
-}
-
-const get_account_by_email = async (email) => {
-    // Gets account matching the ID (hopefully only 1 account comes up)
-    let account = await pool.query(`SELECT account_id, display_name, email, password_hash, profile_image_path 
-                                    FROM hub.hub_accounts WHERE email = $1;`, [email])
-
-    return !!account.length ? account[0] : null;
-}
-
 // Export
 module.exports = {
     query: (sql_text, params) => pool.query(sql_text, params),
@@ -165,9 +118,5 @@ module.exports = {
     get_article_by_url: get_article_by_url,
     get_time_periods: get_time_periods,
     get_teams_in_year: get_teams_in_year,
-    create_unfinalized_account: create_unfinalized_account,
-    finalize_account: finalize_account,
-    get_account_by_email: get_account_by_email,
-    get_article_by_url: get_article_by_url,
-    get_account_by_id: get_account_by_id
+    accounts: require("./accounts")(pool)   // object containing account related functions
 }

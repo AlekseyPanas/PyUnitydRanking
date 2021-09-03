@@ -1,0 +1,27 @@
+<!-- This ejs template defines the page "casing" (ie nav, banner, footer) and allows 
+    for the main body to be a parameter -->
+
+<!DOCTYPE html>
+<html lang="en"> 
+    <% include ../partials/universal/head %>
+    <% include ../partials/universal/scripts %>
+    <% include ../partials/universal/bootstrap %>
+
+    <body>
+        <!-- Includes large logo based on an optional boolean flag -->
+        <% if (!!locals.is_logo && is_logo) { %>
+            <% include ../partials/hub/casing/hub_large_logo %>
+        <% } %>
+
+        <% include ../partials/hub/casing/hub_nav %>
+
+        <div id="main-container">
+            <!-- includes provided template -->
+            <%- include('../' + view_name, view_params); %>
+
+        </div>
+    </body>
+
+    <% include ../partials/hub/casing/hub_footer %>
+
+</html>

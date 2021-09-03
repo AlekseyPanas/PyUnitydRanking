@@ -34,7 +34,7 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(async function(err, req, res, next) {
-  let account = await db.get_account_by_id(req.session.account_id);
+  let account = await db.accounts.get_account_by_id(req.session.account_id);
 
   // set locals, only providing error in development
   res.locals.message = err.message;
