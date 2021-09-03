@@ -1,42 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-    <% include partials/head %>
-    <% include partials/scripts %>
-    <% include partials/bootstrap %>
-    <script src="/javascripts/create_account.js"></script>
+<script src="/javascripts/hub/create_account.js"></script>
 
-    <body>
-        <% include partials/nav %>
+<div id="cracc-inner-container"> 
+    <h1> Create Account </h1>
 
-        <div id="main-container">
-            <div id="cracc-inner-container"> 
-                <h1> Create Account </h1>
-
-                <div id="cracc-head-container">
-                    <img id="cracc-profile-image" src=" <%= !!account.profile_image_path ? account.profile_image_path : '/images/profiles/blank_profile.png'  %> "> </img>
-                    <div id="cracc-head-text-container">
-                        <h3 id="cracc-welcome-text">Welcome!</h3>
-                        <h6 id="cracc-email"> <%= account.email %> </h6>
-                    </div>
-                </div>
-
-                <form id="cracc-form" method="POST" action="/create-account">
-
-                    <p id="cracc-error-display" class="cracc-error"> <i class="fas fa-exclamation-circle"></i> <span id="cracc-error-text"> Display name can only contain letters, numbers, underscores, and dashes </span> </p>
-                    <p id="cracc-error-pass" class="cracc-error"> <i class="fas fa-exclamation-circle"></i> <span id="cracc-error-text"> Password must be at least 8 characters and must contain 1 letter, number, and special character </span> </p>
-                    <p id="cracc-error-confirm" class="cracc-error"> <i class="fas fa-exclamation-circle"></i> <span id="cracc-error-text"> Passwords don't match </span> </p>
-
-                    <input placeholder="Display Name" class="login-field" id="cracc-display-name-field" name="displayname" type="text" required></input>
-                    <input placeholder="Password" class="login-field" id="cracc-password-field" name="pass" type="password" required></input>
-                    <input placeholder="Confirm Password" class="login-field" id="cracc-confirm-password-field" name="confirmpass" type="password" required></input>
-
-                    <button type=submit id="login-button"><span class="login-button-noselect">Create</span><div id="login-button-circle"></div></button>
-
-                </form>
-            </div>
+    <div id="cracc-head-container">
+        <img id="cracc-profile-image" src=" <%= !!account.profile_image_path ? account.profile_image_path : '/images/profiles/blank_profile.png'  %> "> </img>
+        <div id="cracc-head-text-container">
+            <h3 id="cracc-welcome-text">Welcome!</h3>
+            <h6 id="cracc-email"> <%= account.email %> </h6>
         </div>
-    </body>
+    </div>
 
-    <% include partials/footer %>
+    <form id="cracc-form" method="POST" action="/create-account">
 
-</html>
+        <p id="cracc-error-display" class="cracc-error"> <i class="fas fa-exclamation-circle"></i> <span id="cracc-error-text"> Display name can only contain letters, numbers, underscores, and dashes </span> </p>
+        <p id="cracc-error-pass" class="cracc-error"> <i class="fas fa-exclamation-circle"></i> <span id="cracc-error-text"> Password must be at least 8 characters and must contain 1 letter, number, and special character </span> </p>
+        <p id="cracc-error-confirm" class="cracc-error"> <i class="fas fa-exclamation-circle"></i> <span id="cracc-error-text"> Passwords don't match </span> </p>
+
+        <input placeholder="Display Name" class="login-field" id="cracc-display-name-field" name="displayname" type="text" required></input>
+        <input placeholder="Password" class="login-field" id="cracc-password-field" name="pass" type="password" required></input>
+        <input placeholder="Confirm Password" class="login-field" id="cracc-confirm-password-field" name="confirmpass" type="password" required></input>
+
+        <button type=submit id="login-button"><span class="login-button-noselect">Create</span><div id="login-button-circle"></div></button>
+
+    </form>
+</div>

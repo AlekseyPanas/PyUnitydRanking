@@ -1,5 +1,3 @@
-const { accounts } = require("./db");
-
 // Given the DB pool, returns a pack of functions that manipulate accounts
 module.exports = (pool) => {
     return {
@@ -17,7 +15,6 @@ module.exports = (pool) => {
 
         // Gets account matching the ID (hopefully only 1 account comes up)
         get_account_by_id: async (account_id) => {
-            console.log("Account ID", account_id);
             let account = (await pool.query(`SELECT 
                                     account_id, display_name, email, password_hash, profile_image_path 
                                     FROM hub.hub_accounts WHERE account_id = $1;`, [account_id])).rows;
@@ -31,16 +28,11 @@ module.exports = (pool) => {
                                             FROM hub.hub_accounts WHERE email = $1;`, [email])).rows
         
             return !!account.length ? account[0] : null;
+        },
+
+        // Checks if account has been finalized
+        is_account_finalized: (account) => {
+            return !!account.display_name && !!account.password_hash
         }
     }
 }
-
-// Finalizes an unfinalized account entry based on id
-const finalize_account = async (account_id, display_name, password_hash) => (await pool.query(`UPDATE hub.hub_accounts SET 
-                                        display_name = $1, 
-                                        password = $2, 
-                                        is_account_finalized = 1 
-                                        WHERE account_id = $3;`, [display_name, password_hash, account_id]));
-
-
-

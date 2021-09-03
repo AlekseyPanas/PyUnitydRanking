@@ -88,65 +88,113 @@ module.exports = (router) => {
     /* GET Account creation/finalization page */
     router.all('/create-account', async (req, res, next) => {
         // Gets account
-        let account = await db.get_account_by_id(req.session.account_id);
+        let account = await db.accounts.get_account_by_id(req.session.account_id);
 
-        if (!(!!account)) {
-            res.render("create_account", {
-                page: "Create Account",
-                account: account,
-                discord_server: process.env.DISCORD_INVITE,
-            });
-        }
+        /* ======== RENDER CREATE ACCOUNT ======== */
+        res.render("hub/hub_casing", {
+            // Base Casing Requirements
+            page: "Dashboard",
+            account: account,
+            discord_server: process.env.DISCORD_INVITE,
+            is_logo: false,
 
-        else if (!!req.session.account_id) {
-            // If account was already created...
-            if (!!account.is_account_finalized) {
-                res.redirect("/dashboard");
-            } 
-            // If the form was submitted to finalize account...
-            else if (req.method == "POST") {
-                let formData = req.body;
-                
-                // Double checks that form data is valid
-                if (
-                    formData.displayname.match(/^[A-Za-z0-9_-]*$/) &&
-                    formData.pass.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/) &&
-                    formData.pass == formData.confirmpass
-                ) {
-                    console.log("PASSWORD STUFF:")
-                    console.log(formData.pass)
-                    console.log(hashPassword(formData.pass))
-                    // Finalizes account
-                    await db.finalize_account(
-                        account.account_id, 
-                        formData.displayname,
-                        hashPassword(formData.pass)
-                    );
-                    // Redirects to dash
-                    res.redirect("/dashboard");
+            // View name and params
+            view_name: "hub/create_account",
+            view_params: {}
+        });
 
-                } else {
-                    // Throws you out if you dare tamper with frontend form validation
-                    res.redirect("/create-account");
-                }
-            } 
-            // If account needs creating...
-            else {
+        if (false) {
+            // Gets account
+            let account = await db.get_account_by_id(req.session.account_id);
+
+            if (!(!!account)) {
                 res.render("create_account", {
                     page: "Create Account",
                     account: account,
                     discord_server: process.env.DISCORD_INVITE,
                 });
             }
+
+            else if (!!req.session.account_id) {
+                // If account was already created...
+                if (!!account.is_account_finalized) {
+                    res.redirect("/dashboard");
+                } 
+                // If the form was submitted to finalize account...
+                else if (req.method == "POST") {
+                    let formData = req.body;
+                    
+                    // Double checks that form data is valid
+                    if (
+                        formData.displayname.match(/^[A-Za-z0-9_-]*$/) &&
+                        formData.pass.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/) &&
+                        formData.pass == formData.confirmpass
+                    ) {
+                        console.log("PASSWORD STUFF:")
+                        console.log(formData.pass)
+                        console.log(hashPassword(formData.pass))
+                        // Finalizes account
+                        await db.finalize_account(
+                            account.account_id, 
+                            formData.displayname,
+                            hashPassword(formData.pass)
+                        );
+                        // Redirects to dash
+                        res.redirect("/dashboard");
+
+                    } else {
+                        // Throws you out if you dare tamper with frontend form validation
+                        res.redirect("/create-account");
+                    }
+                } 
+                // If account needs creating...
+                else {
+                    res.render("create_account", {
+                        page: "Create Account",
+                        account: account,
+                        discord_server: process.env.DISCORD_INVITE,
+                    });
+                }
+            }
         }
     });
 
 
+    /* GET dashboard */
+    router.get('/dashboard', async (req, res, next) => {
+        // Gets account
+        let account = await db.accounts.get_account_by_id(req.session.account_id);
+        
+        // If logged in
+        if (!!account) {
+            let is_finalized = db.accounts.is_account_finalized(account);
+
+            if (is_finalized) {
+                /* ======== RENDER DASHBOARD ======== */
+                res.render("hub/hub_casing", {
+                    // Base Casing Requirements
+                    page: "Dashboard",
+                    account: account,
+                    discord_server: process.env.DISCORD_INVITE,
+                    is_logo: false,
+
+                    // View name and params
+                    view_name: "hub/about",
+                    view_params: {}
+                });
+            } else {
+                res.redirect("/create-account");
+            }
+        } else {
+            res.redirect("/login");
+        }
+    });
+
+
+    /* GET main hub about page */
     router.get('/about', async (req, res, next) => {
         // Gets account
-        console.log("TEST START");
         let account = await db.accounts.get_account_by_id(req.session.account_id);
-        console.log("TEST END");
 
         /* ======== RENDER ABOUT ======== */
         res.render("hub/hub_casing", {
