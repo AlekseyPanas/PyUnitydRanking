@@ -7,7 +7,7 @@ module.exports = (router) => {
     router.all('/login', async (req, res, next) => {
         // Checks for a redirect query param and sets it to var
         let redirect_query = req.query.login_redirect_url;
-        if (redirect_query == '/login') {  // No redirecting back to login
+        if (redirect_query == '/login' || redirect_query == "/create-account") {  // No redirecting back to login
             redirect_query = undefined;
         }
         // Checks for redirect cookie and sets it to var
@@ -56,30 +56,34 @@ module.exports = (router) => {
     /* POST google login info and redirect to account creation */
     router.post('/google-login', async (req, res, next) => {
 
-        // Gets the middle part of the JWT, which includes all the user data
-        let userData = util.decodeJWT(req.body.credential)[1];
+        if (!!req.body.credential) {
+            // Gets the middle part of the JWT, which includes all the user data
+            let userData = util.decodeJWT(req.body.credential)[1];
 
-        // Checks to see if an account entry exists
-        let account = await db.accounts.get_account_by_email(userData.email);
-        // If account exists
-        if (!!account) {
+            // Checks to see if an account entry exists
+            let account = await db.accounts.get_account_by_email(userData.email);
+            // If account exists
+            if (!!account) {
 
-            // Creates session (logs in the user)
-            req.session.account_id = account.account_id;
+                // Creates session (logs in the user)
+                req.session.account_id = account.account_id;
 
-            // Takes you back to login where shit'll happen
-            res.redirect("/login");
-        }
+                // Takes you back to login where shit'll happen
+                res.redirect("/login");
+            }
 
-        // If account doesn't exist
-        else {
-            // Creates account
-            let accountID = await db.accounts.create_account(userData.email, null, null, userData.picture);
+            // If account doesn't exist
+            else {
+                // Creates account
+                let accountID = await db.accounts.create_account(userData.email, null, null, userData.picture);
 
-            // Creates session (logs in the user)
-            req.session.account_id = accountID;
+                // Creates session (logs in the user)
+                req.session.account_id = accountID;
 
-            // Redirects to login
+                // Redirects to login
+                res.redirect("/login");
+            }
+        } else {
             res.redirect("/login");
         }
     });
@@ -89,6 +93,16 @@ module.exports = (router) => {
     router.all('/create-account', async (req, res, next) => {
         // Gets account
         let account = await db.accounts.get_account_by_id(req.session.account_id);
+        let is_finalized;
+
+        // If you are logged in and finalized, takes back to login. Login page will handle further redirects
+        if (!!account) {
+            is_finalized = db.accounts.is_account_finalized(account);
+            
+            if (is_finalized) {
+                res.redirect("/login");
+            }   
+        }
 
         /* ======== RENDER CREATE ACCOUNT ======== */
         res.render("hub/hub_casing", {
@@ -102,61 +116,6 @@ module.exports = (router) => {
             view_name: "hub/create_account",
             view_params: {}
         });
-
-        if (false) {
-            // Gets account
-            let account = await db.get_account_by_id(req.session.account_id);
-
-            if (!(!!account)) {
-                res.render("create_account", {
-                    page: "Create Account",
-                    account: account,
-                    discord_server: process.env.DISCORD_INVITE,
-                });
-            }
-
-            else if (!!req.session.account_id) {
-                // If account was already created...
-                if (!!account.is_account_finalized) {
-                    res.redirect("/dashboard");
-                } 
-                // If the form was submitted to finalize account...
-                else if (req.method == "POST") {
-                    let formData = req.body;
-                    
-                    // Double checks that form data is valid
-                    if (
-                        formData.displayname.match(/^[A-Za-z0-9_-]*$/) &&
-                        formData.pass.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/) &&
-                        formData.pass == formData.confirmpass
-                    ) {
-                        console.log("PASSWORD STUFF:")
-                        console.log(formData.pass)
-                        console.log(hashPassword(formData.pass))
-                        // Finalizes account
-                        await db.finalize_account(
-                            account.account_id, 
-                            formData.displayname,
-                            hashPassword(formData.pass)
-                        );
-                        // Redirects to dash
-                        res.redirect("/dashboard");
-
-                    } else {
-                        // Throws you out if you dare tamper with frontend form validation
-                        res.redirect("/create-account");
-                    }
-                } 
-                // If account needs creating...
-                else {
-                    res.render("create_account", {
-                        page: "Create Account",
-                        account: account,
-                        discord_server: process.env.DISCORD_INVITE,
-                    });
-                }
-            }
-        }
     });
 
 
@@ -220,10 +179,10 @@ module.exports = (router) => {
 
     // Ajax call for manual login form to work
     router.post("/ajax/logincheck", async (req, res, next) => {
-        let account = await db.get_account_by_email(req.body.email);
+        let account = await db.accounts.get_account_by_email(req.body.email);
     
         // Login successful
-        if (!!account && account.password == util.hashPassword(req.body.password)) {
+        if (!!account && account.password_hash == util.hashPassword(req.body.password)) {
             req.session.account_id = account.account_id;
             
             res.send("1");
@@ -231,5 +190,66 @@ module.exports = (router) => {
             // Login failed
             res.send("0");
         }
+    });
+
+    // Ajax call for account creation to work
+    router.post("/ajax/createaccountcheck", async (req, res, next) => {
+        let account = await db.accounts.get_account_by_id(req.session.account_id);
+        
+        // Turns form data into object
+        let formData = {}
+        JSON.parse(req.body.formData).map((itm) => {formData[itm.name] = itm.value});
+        
+        // Returns data indicating what happened with account creation (any errors)
+        let return_json = {}
+
+        // Validates email field if it exists
+        if (!!formData.email) {
+            let is_match = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(formData.email);
+            let is_dupe = !!(await db.accounts.get_account_by_email(formData.email));
+            return_json.email = is_match && !is_dupe;
+        }
+        // Validates display_name field if it exists
+        if (!!formData.display_name) {
+            return_json.display_name = /^[A-Za-z0-9_-]*$/.test(formData.display_name);
+        }
+        // Validates password field if it exists
+        if (!!formData.password) {
+            return_json.password = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(formData.password);
+            return_json.confirm_password = formData.password == formData.confirm_password;
+        }
+
+        // Checks if there are any errors
+        let is_error = false;
+        Object.values(return_json).map((bool) => { if (!bool) {is_error = true;} });
+        return_json.is_error = is_error;
+        
+        // If no errors, creates or finalized account
+        if (!is_error) {
+            if (!!account) {
+                console.log("Account being updated");
+                // Updates account with provided data
+                await db.accounts.update_account(account.account_id, formData.password, formData.display_name, null);
+            } else {
+                // Creates new account with provided data and logs user in
+                if (!!formData.email) {
+                    let account_id = await db.accounts.create_account(
+                        formData.email, 
+                        util.hashPassword(formData.password),
+                        formData.display_name,
+                        null);
+                    
+                    req.session.account_id = account_id;
+                    console.log("created and logged_in");
+                } else {
+                    console.log("Session somehow expired");
+                    // This code might run if session expired during account finalization
+                    return_json.is_session_expired = true;
+                }
+            }
+        }       
+        console.log("final return", return_json); 
+
+        res.json(return_json);
     });
 };

@@ -3,23 +3,38 @@
 <div id="cracc-inner-container"> 
     <h1> Create Account </h1>
 
-    <div id="cracc-head-container">
-        <img id="cracc-profile-image" src=" <%= !!account.profile_image_path ? account.profile_image_path : '/images/profiles/blank_profile.png'  %> "> </img>
-        <div id="cracc-head-text-container">
-            <h3 id="cracc-welcome-text">Welcome!</h3>
-            <h6 id="cracc-email"> <%= account.email %> </h6>
+    <% if (!!account) { %>
+        <div id="cracc-head-container">
+            <img id="cracc-profile-image" src=" <%= !!account.profile_image_path ? account.profile_image_path : '/images/organizations/blank_profile/blank_profile.png'  %> "> </img>
+            <div id="cracc-head-text-container">
+                <h3 id="cracc-welcome-text">Welcome!</h3>
+                <h6 id="cracc-email"> <%= account.email %> </h6>
+            </div>
         </div>
-    </div>
+    <% } %>
 
-    <form id="cracc-form" method="POST" action="/create-account">
+    <form id="cracc-form">
 
+        <p id="cracc-error-email" class="cracc-error"> <i class="fas fa-exclamation-circle"></i> <span id="cracc-error-text"> An account with this email exists, wanna <a href="/login">login?</a> </span> </p>
         <p id="cracc-error-display" class="cracc-error"> <i class="fas fa-exclamation-circle"></i> <span id="cracc-error-text"> Display name can only contain letters, numbers, underscores, and dashes </span> </p>
         <p id="cracc-error-pass" class="cracc-error"> <i class="fas fa-exclamation-circle"></i> <span id="cracc-error-text"> Password must be at least 8 characters and must contain 1 letter, number, and special character </span> </p>
         <p id="cracc-error-confirm" class="cracc-error"> <i class="fas fa-exclamation-circle"></i> <span id="cracc-error-text"> Passwords don't match </span> </p>
 
-        <input placeholder="Display Name" class="login-field" id="cracc-display-name-field" name="displayname" type="text" required></input>
-        <input placeholder="Password" class="login-field" id="cracc-password-field" name="pass" type="password" required></input>
-        <input placeholder="Confirm Password" class="login-field" id="cracc-confirm-password-field" name="confirmpass" type="password" required></input>
+        <% if (!(!!account)) { %>
+            <input placeholder="Email" class="login-field" id="cracc-email-field" name="email" type="email" required></input>
+        <% } %>  
+
+        <% if (!(!!account) || !(!!account.display_name)) { %> 
+            <input placeholder="Display Name" class="login-field" id="cracc-display-name-field" name="display_name" type="text" required></input>
+        <% } %>  
+        
+        <% if (!(!!account) || !(!!account.password_hash)) { %>
+            <input placeholder="Password" class="login-field" id="cracc-password-field" name="password" type="password" required></input>
+        <% } %>  
+        
+        <% if (!(!!account) || !(!!account.password_hash)) { %>
+            <input placeholder="Confirm Password" class="login-field" id="cracc-confirm-password-field" name="confirm_password" type="password" required></input>
+        <% } %>  
 
         <button type=submit id="login-button"><span class="login-button-noselect">Create</span><div id="login-button-circle"></div></button>
 

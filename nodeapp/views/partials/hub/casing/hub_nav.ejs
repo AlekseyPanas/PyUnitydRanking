@@ -37,7 +37,7 @@
                     </button>
 
                     <a href="/dashboard">
-                        <img id="nav-profile-image" src=" <%= account.profile_image_path %> "> </img>
+                        <img id="nav-profile-image" src=" <%= !!account.profile_image_path ? account.profile_image_path : '/images/organizations/blank_profile/blank_profile.png'  %> "> </img>
                     </a>
                 <% } else { %>
                     <button id="nav-login"> 

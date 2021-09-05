@@ -10,65 +10,62 @@ $(document).ready(() => {
 
     // Validates form submission
     $("form").submit((e) => {
-        if (!checkValid()) {
-            e.preventDefault();
-        }
+        e.preventDefault();
+
+        $.post("/ajax/createaccountcheck", {formData: JSON.stringify($("#cracc-form").serializeArray())}, 
+        (res) => {
+            if (!!res.is_session_expired) {
+                // Refreshes page
+                location.reload();
+            } else if (res.is_error) {
+                // Displays errors
+                display_errors(res);
+            } else {
+                // Redirect back to login flow
+                location.href = "/login";
+            }
+        });
     });
 
 });
 
-function checkValid() {
-    let valid = true;
-
-    let name = $("#cracc-display-name-field").val();
-    let pass = $("#cracc-password-field").val();
-    let confirm_pass = $("#cracc-confirm-password-field").val();
-
-    // Checks if display name is valid
-    if (!name.match(/^[A-Za-z0-9_-]*$/)) {
+function display_errors(res) {
+    // Email field
+    if ("email" in res && !res.email) {
         // Shows error
-        $("#cracc-error-display").css("display", "block");
-
-        $("#cracc-display-name-field").addClass("login-field-error");
-
-        valid = false;
+        $("#cracc-error-email").css("display", "block");
+        $("#cracc-email-field").addClass("login-field-error");
     } else {
-        // Hide error
+        // Hides error
+        $("#cracc-error-email").css("display", "none");
+        $("#cracc-email-field").removeClass("login-field-error");
+    }
+    
+    // Display field
+    if ("display_name" in res && !res.display_name) {
+        $("#cracc-error-display").css("display", "block");
+        $("#cracc-display-name-field").addClass("login-field-error");
+    } else {
         $("#cracc-error-display").css("display", "none");
-
         $("#cracc-dislay-name-field").removeClass("login-field-error");
     }
-
-    // Checks if password is good
-    if (!pass.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/)) {
-        // Shows error
+    
+    // Password field
+    if ("password" in res && !res.password) {
         $("#cracc-error-pass").css("display", "block");
-
         $("#cracc-password-field").addClass("login-field-error");
-
-        valid = false;
     } else {
-        // Hide error
         $("#cracc-error-pass").css("display", "none");
-
         $("#cracc-password-field").removeClass("login-field-error");
     }
-
-    // Checks if passwords match
-    if (!(pass == confirm_pass)) {
-        // Shows error
+    
+    // Confirm password field
+    if ("confirm_password" in res && !res.confirm_password) {
         $("#cracc-error-confirm").css("display", "block");
-
         $("#cracc-confirm-password-field").addClass("login-field-error");
-
-        valid = false;
     } else {
-        // Hide error
         $("#cracc-error-confirm").css("display", "none");
-
         $("#cracc-confirm-password-field").removeClass("login-field-error");
     }
-
-    return valid;
 };
 
