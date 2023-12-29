@@ -1334,6 +1334,8 @@ ______          _           _
   top: 50%;
   margin: 2px;
   padding: 0 3px;
+
+  z-index: 999;
   
   transition: all 0.2s ease-out;
 } .proj-arrow:hover {
@@ -1343,4 +1345,42 @@ ______          _           _
 
 #proj-arrow-right {
   right: 7px;
+}
+
+#gallery-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 40px;
+}
+
+#gallery-container p {
+  text-align: center;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: medium;
+  color: wheat;
+  padding: 5px;
+  margin-top: 10px;
+  background-color: black;
+  width: 450px;
+}
+
+.gallery-image-container {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#gallery-title {
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  margin: 15px 0px;
+  background-color: black;
+  color: white;
+  font-family: cursive;
+  font-style: italic;
 }
