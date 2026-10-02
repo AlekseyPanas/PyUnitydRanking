@@ -10,6 +10,9 @@ var indexRouter = require('./routes/index');
 
 var app = express();
 
+// Behind nginx + Cloudflare tunnel: trust X-Forwarded-* from the local proxy only
+app.set('trust proxy', 'loopback');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -23,7 +26,7 @@ app.use(session({
   secret: 'shut the fuck up, itsa secret!',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: process.env.IS_HTTPS }
+  cookie: { secure: process.env.IS_HTTPS === '1' }
 }))
 
 app.use('/', indexRouter);
